@@ -1,26 +1,31 @@
 import { useEffect, useState } from 'preact/hooks';
+import { findProject } from '@/src/lib/plan/projects';
 import { removeValue, STORAGE_KEYS } from '@/src/lib/storage/store';
 import { strings } from '@/src/strings';
 import { AppFooter } from '@/src/ui/components/AppFooter';
 import { Toast, type ToastMessage } from '@/src/ui/components/Toast';
 import { consumeQueryParam, navigate, useRoute, type RouteName } from '@/src/ui/router';
+import { useProjects } from '@/src/ui/useProjects';
 import { useSettings } from '@/src/ui/theme';
 import { Calculator } from '@/src/ui/views/Calculator';
+import { Planner } from '@/src/ui/views/Planner';
+import { Projects } from '@/src/ui/views/Projects';
 import { SettingsView } from '@/src/ui/views/Settings';
 
 interface AppProps {
   version: string;
 }
 
-/** Nav entries, in the order they appear in the rail. */
 const NAV: ReadonlyArray<{ name: RouteName; path: string; label: string }> = [
   { name: 'calc', path: '/calc', label: strings.nav.calculator },
+  { name: 'projects', path: '/projects', label: strings.nav.projects },
   { name: 'settings', path: '/settings', label: strings.nav.settings },
 ];
 
 export function App({ version }: AppProps) {
   const route = useRoute();
   const settings = useSettings();
+  const projects = useProjects();
   const [calcInput, setCalcInput] = useState('');
   const [toast, setToast] = useState<ToastMessage | undefined>();
 
@@ -32,9 +37,22 @@ export function App({ version }: AppProps) {
     if (query !== undefined && query !== '') setCalcInput(query);
   }, [route]);
 
-  const notify = (text: string, tone: ToastMessage['tone'] = 'info') => {
-    setToast({ id: Date.now(), text, tone });
-  };
+  // A root that could not be validated is quarantined on load; say so rather than letting
+  // blocks quietly disappear.
+  useEffect(() => {
+    if (projects.quarantined.length === 0) return;
+    const [first] = projects.quarantined;
+    if (first === undefined) return;
+    setToast({
+      id: Date.now(),
+      tone: 'error',
+      text: `${first.roots.length} block(s) in “${first.project}” could not be read and were set aside: ${first.roots
+        .map((root) => root.cidr)
+        .join(', ')}.`,
+    });
+  }, [projects.quarantined]);
+
+  const openProject = findProject(projects.projects, route.params.projectId ?? '');
 
   return (
     <div class="nc-shell">
@@ -47,7 +65,11 @@ export function App({ version }: AppProps) {
           {NAV.map((entry) => (
             <a
               key={entry.name}
-              class={`nc-nav__link${route.name === entry.name ? ' is-current' : ''}`}
+              class={`nc-nav__link${
+                route.name === entry.name || (entry.name === 'projects' && route.name === 'planner')
+                  ? ' is-current'
+                  : ''
+              }`}
               href={`#${entry.path}`}
               aria-current={route.name === entry.name ? 'page' : undefined}
               onClick={(event) => {
@@ -62,17 +84,18 @@ export function App({ version }: AppProps) {
       </header>
 
       <main class="nc-shell__body">
-        {route.name === 'settings' ? (
+        {route.name === 'settings' && (
           <SettingsView
             handle={settings}
             version={version}
-            onExportAll={() => notify(strings.settings.exportAll)}
+            onExportAll={() => setToast({ id: Date.now(), tone: 'info', text: strings.settings.exportAll })}
             onDeleteAll={async () => {
               await Promise.all([
                 removeValue(STORAGE_KEYS.projects),
                 removeValue(STORAGE_KEYS.settings),
                 removeValue(STORAGE_KEYS.calcLast),
               ]);
+              projects.replaceAll([]);
               settings.update({
                 theme: 'auto',
                 allowSlash31: false,
@@ -81,7 +104,34 @@ export function App({ version }: AppProps) {
               });
             }}
           />
-        ) : (
+        )}
+
+        {route.name === 'projects' && (
+          <Projects
+            projects={projects.projects}
+            onOpen={(id) => navigate(`/planner/${id}`)}
+            onCreate={(name, extra) => {
+              const project = projects.create(name, extra);
+              navigate(`/planner/${project.id}`);
+            }}
+            onDelete={projects.remove}
+          />
+        )}
+
+        {route.name === 'planner' &&
+          (openProject === undefined ? (
+            projects.ready && <p class="nc-empty">{strings.projects.empty}</p>
+          ) : (
+            <Planner
+              key={openProject.id}
+              project={openProject}
+              onChange={projects.save}
+              onBack={() => navigate('/projects')}
+              saveState={projects.saveState}
+            />
+          ))}
+
+        {route.name === 'calc' && (
           <div class="nc-stack">
             <h1 class="nc-title">{strings.calc.title}</h1>
             <section class="nc-panel nc-section">

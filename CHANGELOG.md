@@ -9,6 +9,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.8.0] — 2026-08-19
+
+### Added
+- The **Planner** (F3): an indented, keyboard-operable tree per root block. Every leaf row
+  carries a colour dot, the block, the dotted mask (IPv4), the address range, the usable
+  count, the name and the VLAN; internal nodes carry a name, a collapse twisty and a join
+  action (FR-PLAN-06).
+- Split, Split-to-a-target-prefix and Join, with the join confirmation naming how many named
+  subnets would be lost, and the 1,024-leaf refusal explained rather than silent
+  (FR-PLAN-03/04).
+- Inline metadata editing with a **colour swatch grid** — never a text field — plus a VLAN
+  field validated against 1–4094 and a notes field (FR-PLAN-05).
+- A utilisation meter per root showing how much of the block is covered by named subnets
+  (FR-PLAN-07), a saved-state indicator with debounced autosave (FR-PLAN-08), and undo/redo
+  buttons over the whole plan (FR-PLAN-09).
+- IPv6 roots behave identically, and a /64 leaf carries the standard-subnet badge
+  (FR-PLAN-10).
+- Keyboard: arrow keys move and collapse/expand, `S` splits, `J` joins, `F2`/`Enter` edits,
+  with ARIA tree roles throughout (§9.4).
+- The **Projects** view (FR-PLAN-01): create with name/client/notes, cards showing root and
+  subnet counts and the last update, open, and delete behind a confirmation.
+- `useProjects` owns the list and its debounced persistence; a root that fails validation on
+  load is quarantined and reported in a toast instead of vanishing quietly.
+- `describeBlock` gives the planner, the solver and the exporters one shared summary.
+
+### Fixed
+- The planner now tells its parent about a new plan from an effect rather than from inside a
+  state updater, and is mounted with `key={project.id}` so switching projects gives a fresh
+  undo history. Previously a split could be discarded before it rendered.
+
+### Tests
+- 13 component tests walking the whole §6 acceptance flow: add a root, refuse an overlapping
+  one, split to two /17s and on to /18s, name a leaf with a VLAN and a colour, join with the
+  confirmation naming one affected subnet, undo and redo, the /27 refusal and the /24 carve,
+  the utilisation meter, the IPv6 /64 badge, collapse/expand, keyboard operation and autosave.
+
 ## [0.7.0] — 2026-08-19
 
 ### Added
@@ -235,7 +271,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.8.0
 [0.7.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.7.0
 [0.6.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.6.0
 [0.5.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.5.0

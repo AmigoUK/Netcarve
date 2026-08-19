@@ -193,3 +193,305 @@
     font-size: var(--text-xl);
   }
 }
+
+/* Projects ------------------------------------------------------------------ */
+
+.nc-projects__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.nc-projects__form {
+  flex-direction: row;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.nc-projects__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--space-3);
+  flex: 1 1 24rem;
+}
+
+.nc-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nc-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.nc-card__body {
+  flex: 1 1 auto;
+}
+
+.nc-card__name {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.nc-card__client {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--accent);
+}
+
+.nc-card__roots {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  word-break: break-all;
+}
+
+.nc-card__actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Planner ------------------------------------------------------------------- */
+
+.nc-planner__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.nc-planner__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.nc-save {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.nc-save--saving {
+  color: var(--accent);
+}
+
+.nc-save--error {
+  color: var(--danger);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.nc-field--grow {
+  flex: 1 1 16rem;
+}
+
+.nc-root {
+  margin-bottom: var(--space-4);
+  padding: var(--space-4);
+}
+
+.nc-root__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--rule);
+}
+
+.nc-root__cidr {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.nc-root__meter {
+  flex: 1 1 14rem;
+}
+
+.nc-meter {
+  height: 6px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--panel-sunken);
+  overflow: hidden;
+}
+
+.nc-meter__fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+/* Tree ---------------------------------------------------------------------- */
+
+.nc-tree {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nc-tree__item.is-selected > .nc-tree__row {
+  background: var(--accent-wash);
+}
+
+.nc-tree__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  /* The gutter is the ruler: each level steps in by one notch. */
+  padding-inline-start: calc(var(--space-2) + var(--depth, 0) * var(--space-4));
+  border-bottom: 1px solid var(--rule);
+  font-size: var(--text-sm);
+  cursor: default;
+}
+
+.nc-tree__row:hover {
+  background: var(--panel-sunken);
+}
+
+.nc-tree__twisty {
+  width: 1.25rem;
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.nc-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--palette-grey-dot);
+}
+
+.nc-dot.is-empty {
+  background: transparent;
+  border: 1px dashed var(--rule-strong);
+}
+
+.nc-dot--blue { background: var(--palette-blue-dot); }
+.nc-dot--green { background: var(--palette-green-dot); }
+.nc-dot--amber { background: var(--palette-amber-dot); }
+.nc-dot--red { background: var(--palette-red-dot); }
+.nc-dot--violet { background: var(--palette-violet-dot); }
+.nc-dot--teal { background: var(--palette-teal-dot); }
+.nc-dot--pink { background: var(--palette-pink-dot); }
+.nc-dot--grey { background: var(--palette-grey-dot); }
+
+.nc-tree__cidr {
+  min-width: 11rem;
+  font-weight: 600;
+}
+
+.nc-tree__mask,
+.nc-tree__range,
+.nc-tree__usable {
+  color: var(--ink-soft);
+  font-size: var(--text-xs);
+}
+
+.nc-tree__range {
+  min-width: 16rem;
+}
+
+.nc-tree__usable {
+  min-width: 5rem;
+  text-align: right;
+}
+
+.nc-tree__name {
+  flex: 1 1 8rem;
+  font-weight: 600;
+}
+
+.nc-tree__name.is-empty {
+  font-weight: 400;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.nc-tree__vlan {
+  font-size: var(--text-xs);
+  color: var(--accent);
+}
+
+.nc-tree__actions {
+  display: flex;
+  gap: var(--space-1);
+  margin-inline-start: auto;
+}
+
+.nc-inline-panel {
+  margin: var(--space-2) 0 var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--rule-strong);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--panel-sunken);
+  font-size: var(--text-sm);
+}
+
+.nc-inline-panel p {
+  margin: 0 0 var(--space-2);
+}
+
+.nc-editor {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-3);
+  align-items: end;
+}
+
+/* Colour swatches ----------------------------------------------------------- */
+
+.nc-swatches {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.nc-swatch {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.nc-swatch.is-selected {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.nc-swatch--blue { background: var(--palette-blue-dot); }
+.nc-swatch--green { background: var(--palette-green-dot); }
+.nc-swatch--amber { background: var(--palette-amber-dot); }
+.nc-swatch--red { background: var(--palette-red-dot); }
+.nc-swatch--violet { background: var(--palette-violet-dot); }
+.nc-swatch--teal { background: var(--palette-teal-dot); }
+.nc-swatch--pink { background: var(--palette-pink-dot); }
+.nc-swatch--grey { background: var(--palette-grey-dot); }
+
+@media (max-width: 60rem) {
+  .nc-tree__range {
+    display: none;
+  }
+}
