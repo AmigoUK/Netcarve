@@ -1,0 +1,38 @@
+{
+  "name": "netcarve",
+  "version": "0.0.1",
+  "description": "IP subnet calculator, visual address planner and VLSM solver — entirely on-device.",
+  "private": true,
+  "type": "module",
+  "author": "Tomasz 'Amigo' Lewandowski <dev@attv.uk>",
+  "license": "MIT",
+  "homepage": "https://www.attv.uk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AmigoUK/Netcarve.git"
+  },
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "postinstall": "wxt prepare",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "preact": "^10.29.8"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/preact": "^3.2.4",
+    "@types/node": "^26.2.0",
+    "@vitest/coverage-v8": "^4.1.11",
+    "jsdom": "^30.0.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11",
+    "wxt": "^0.21.4"
+  }
+}
