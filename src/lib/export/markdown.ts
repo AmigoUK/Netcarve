@@ -8,6 +8,8 @@
 
 import { strings } from '../../strings';
 import type { CalcResult } from '../calc/result';
+import type { Project } from '../plan/model';
+import { projectSections, PROJECT_COLUMNS } from './project';
 
 /** Escapes the only character that can break a Markdown table cell. */
 export function escapeCell(value: string): string {
@@ -54,4 +56,30 @@ export function calcToMarkdown(result: CalcResult, includeFooter = true): string
   }
 
   return withFooter(sections.join('\n'), includeFooter);
+}
+
+/**
+ * A whole project as Markdown (FR-EXP-01): the project name as a heading, then one table per
+ * root block with the columns `Subnet | Mask | Range | Usable | Name | VLAN | Notes`.
+ */
+export function projectToMarkdown(project: Project, includeFooter = true): string {
+  const lines: string[] = [`## ${project.name}`];
+  if (project.client !== undefined) lines.push('', `**Client:** ${project.client}`);
+  if (project.notes !== undefined) lines.push('', project.notes);
+
+  const sections = projectSections(project);
+  if (sections.length === 0) {
+    lines.push('', '_No blocks planned yet._');
+  }
+
+  for (const section of sections) {
+    lines.push(
+      '',
+      `### ${section.rootCidr}`,
+      '',
+      markdownTable([...PROJECT_COLUMNS], section.rows.map((row) => row.cells)),
+    );
+  }
+
+  return withFooter(lines.join('\n'), includeFooter);
 }

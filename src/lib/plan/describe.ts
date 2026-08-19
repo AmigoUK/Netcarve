@@ -18,6 +18,9 @@ export interface BlockSummary {
   readonly range: string;
   readonly usable: CountDisplay;
   readonly total: CountDisplay;
+  /** Raw counts, for exports that want plain digits rather than grouped display text. */
+  readonly usableCount: bigint;
+  readonly totalCount: bigint;
   /** True for an IPv6 /64 — the standard subnet size (FR-PLAN-10). */
   readonly standardSubnet: boolean;
 }
@@ -29,14 +32,19 @@ export function describeBlock(block: Cidr): BlockSummary {
   const firstAddress = show(first);
   const lastAddress = show(last);
 
+  const usableCount = usableRange(block).count;
+  const totalCount = totalAddresses(block);
+
   return {
     cidr: formatCidr(block),
     mask: block.family === 4 ? formatIPv4(maskV4(block.prefix)) : '',
     firstAddress,
     lastAddress,
     range: `${firstAddress} – ${lastAddress}`,
-    usable: formatCount(usableRange(block).count),
-    total: formatCount(totalAddresses(block)),
+    usable: formatCount(usableCount),
+    total: formatCount(totalCount),
+    usableCount,
+    totalCount,
     standardSubnet: block.family === 6 && block.prefix === 64,
   };
 }

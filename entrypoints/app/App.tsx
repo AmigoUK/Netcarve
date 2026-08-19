@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'preact/hooks';
-import { findProject } from '@/src/lib/plan/projects';
+import { downloadText } from '@/src/lib/export/download';
+import { projectsToJson, projectToJson } from '@/src/lib/export/json';
+import { projectToMarkdown } from '@/src/lib/export/markdown';
+import { projectToCsv } from '@/src/lib/export/csv';
+import { findProject, upsertProject } from '@/src/lib/plan/projects';
 import { removeValue, STORAGE_KEYS } from '@/src/lib/storage/store';
 import { strings } from '@/src/strings';
 import { AppFooter } from '@/src/ui/components/AppFooter';
+import { ExportBar } from '@/src/ui/components/ExportBar';
+import { ImportButton } from '@/src/ui/components/ImportButton';
 import { Toast, type ToastMessage } from '@/src/ui/components/Toast';
 import { consumeQueryParam, navigate, useRoute, type RouteName } from '@/src/ui/router';
 import { useProjects } from '@/src/ui/useProjects';
@@ -53,6 +59,11 @@ export function App({ version }: AppProps) {
   }, [projects.quarantined]);
 
   const openProject = findProject(projects.projects, route.params.projectId ?? '');
+  const notify = (text: string, tone: ToastMessage['tone'] = 'info') =>
+    setToast({ id: Date.now(), text, tone });
+
+  const exportEverything = () =>
+    downloadText('netcarve-projects.json', projectsToJson(projects.projects), 'application/json');
 
   return (
     <div class="nc-shell">
@@ -88,7 +99,7 @@ export function App({ version }: AppProps) {
           <SettingsView
             handle={settings}
             version={version}
-            onExportAll={() => setToast({ id: Date.now(), tone: 'info', text: strings.settings.exportAll })}
+            onExportAll={exportEverything}
             onDeleteAll={async () => {
               await Promise.all([
                 removeValue(STORAGE_KEYS.projects),
@@ -115,6 +126,22 @@ export function App({ version }: AppProps) {
               navigate(`/planner/${project.id}`);
             }}
             onDelete={projects.remove}
+            actions={
+              <>
+                <ImportButton
+                  onImported={(imported) => {
+                    let next = projects.projects;
+                    for (const project of imported) next = upsertProject(next, project);
+                    projects.replaceAll(next);
+                    notify(strings.exports.importDone(imported[0]?.name ?? ''));
+                  }}
+                  onError={(message) => notify(message, 'error')}
+                />
+                <button type="button" class="nc-button" onClick={exportEverything}>
+                  {strings.projects.exportAll}
+                </button>
+              </>
+            }
           />
         )}
 
@@ -128,6 +155,14 @@ export function App({ version }: AppProps) {
               onChange={projects.save}
               onBack={() => navigate('/projects')}
               saveState={projects.saveState}
+              actions={
+                <ExportBar
+                  name={openProject.name}
+                  markdown={() => projectToMarkdown(openProject, settings.settings.exportFooter)}
+                  csv={() => projectToCsv(openProject)}
+                  json={() => projectToJson(openProject)}
+                />
+              }
             />
           ))}
 

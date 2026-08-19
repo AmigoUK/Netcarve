@@ -245,3 +245,66 @@ describe('Planner (the §6 acceptance walkthrough)', () => {
     }
   });
 });
+
+describe('Export and import (F7)', () => {
+  it('copies the plan as Markdown from the planner', async () => {
+    Object.assign(navigator, { clipboard: { writeText: vi.fn().mockResolvedValue(undefined) } });
+    await openPlanner([{ cidr: '10.20.0.0/16' }]);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Copy as Markdown' }));
+    await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalled());
+
+    const [markdown] = vi.mocked(navigator.clipboard.writeText).mock.calls[0] as [string];
+    expect(markdown).toContain('## Acme refresh');
+    expect(markdown).toContain('| Subnet | Mask | Range | Usable | Name | VLAN | Notes |');
+  });
+
+  it('downloads CSV and JSON through an object URL', async () => {
+    const createObjectURL = vi.fn(() => 'blob:netcarve');
+    const revokeObjectURL = vi.fn();
+    vi.stubGlobal('URL', { ...URL, createObjectURL, revokeObjectURL });
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
+
+    await openPlanner([{ cidr: '10.20.0.0/16' }]);
+    fireEvent.click(screen.getByRole('button', { name: 'Download CSV' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Download JSON' }));
+
+    expect(createObjectURL).toHaveBeenCalledTimes(2);
+    expect(click).toHaveBeenCalledTimes(2);
+    expect(revokeObjectURL).toHaveBeenCalledTimes(2);
+    vi.unstubAllGlobals();
+  });
+
+  it('imports a project from a NetCarve JSON file', async () => {
+    globalThis.location.hash = '#/projects';
+    render(<App version="1.0.0" />);
+    await screen.findByText(/No projects yet/i);
+
+    const envelope = {
+      app: 'netcarve',
+      schemaVersion: 1,
+      project: { ...createProject('Imported plan'), id: 'imported-1', roots: [{ cidr: '10.0.0.0/8' }] },
+    };
+    const file = new File([JSON.stringify(envelope)], 'plan.json', { type: 'application/json' });
+    const input = screen.getByLabelText('Choose a NetCarve JSON file') as HTMLInputElement;
+    Object.defineProperty(input, 'files', { value: [file] });
+    fireEvent.change(input);
+
+    expect(await screen.findByRole('heading', { name: 'Imported plan' })).toBeInTheDocument();
+  });
+
+  it('refuses a file that is not a NetCarve export', async () => {
+    globalThis.location.hash = '#/projects';
+    render(<App version="1.0.0" />);
+    await screen.findByText(/No projects yet/i);
+
+    const file = new File(['{"app":"other"}'], 'plan.json', { type: 'application/json' });
+    const input = screen.getByLabelText('Choose a NetCarve JSON file') as HTMLInputElement;
+    Object.defineProperty(input, 'files', { value: [file] });
+    fireEvent.change(input);
+
+    expect(await screen.findByRole('status')).toHaveTextContent(
+      'That file is not a NetCarve export.',
+    );
+  });
+});
