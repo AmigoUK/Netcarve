@@ -86,3 +86,54 @@ tag and GitHub Release, per the attv.uk house rules. Pre-1.0 minor bumps mark fe
 §4.4 states usable equals total for IPv6, with subnet-router anycast mentioned only as a footnote.
 `usableRange` therefore returns first = network and last = last address for every IPv6 prefix,
 and the UI shows the anycast footnote for prefixes shorter than /127.
+
+---
+
+## D11 — VLSM sizing has a floor of four addresses
+
+**Ambiguity:** FR-VLSM-02 gives `needed = requiredHosts + 2`, rounded up to a power of two. For
+a one-host requirement that yields two addresses — a `/31` — even when the "allow /31" toggle is
+off.
+
+**Decision:** without the toggle the block size never drops below four addresses, so a `/31`
+only ever appears when the user has asked for it. With the toggle on, requirements of one or two
+hosts take a `/31`, which is what the setting is for.
+
+---
+
+## D12 — The conflict sweep is a stack, and reports one chain per innermost block
+
+**Ambiguity:** FR-CONF-03 asks for containment *chains* but does not say how overlapping chains
+should be grouped.
+
+**Decision:** the sorted list is swept once with a stack, so whatever sits on top when a block
+arrives is its nearest container. Each innermost block then yields one chain, walked back up
+through its containers — so `10.0.0.0/8 ⊃ 10.1.0.0/16` and `10.0.0.0/8 ⊃ 10.2.0.0/16` are
+reported as two chains rather than one branching tree. That reads better in a report and keeps
+the output flat enough to export.
+
+Duplicate entries are grouped separately, by canonical block, before the sweep runs, so an
+identical pair is never also reported as containment.
+
+---
+
+## D13 — The planner is mounted with `key={project.id}`
+
+Opening a different project must not inherit the previous plan's undo history. Rather than
+resetting state from an effect — which raced with the first edit — the planner is keyed by
+project id, so Preact remounts it and the history starts clean.
+
+---
+
+## D14 — The VLSM solver has no "Solve" button
+
+The allocation is deterministic and costs microseconds, so it recomputes as the user types. A
+button would only add a step between changing a host count and seeing what it does to the plan.
+
+---
+
+## D15 — Leftover VLSM blocks are merged back together
+
+The splitting step naturally leaves a ladder of fragments. The free list merges any two halves
+that are still whole before it is shown, so it reports the largest blocks actually available
+rather than the shape the algorithm happened to leave behind.

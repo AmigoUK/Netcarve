@@ -44,6 +44,24 @@ npm run typecheck   # tsc --noEmit
 
 Load the unpacked extension from `.output/chrome-mv3` via `chrome://extensions` → *Load unpacked*.
 
+### Quality gates
+
+| Gate | Where | Status |
+|---|---|---|
+| 100 % branch coverage of `src/lib/ip` | `vitest.config.ts` thresholds, enforced in CI | enforced |
+| Manifest permissions limited to `storage` + `contextMenus` | `wxt.config.ts` | enforced |
+| No network requests at runtime | no `fetch`/`XMLHttpRequest`/remote assets anywhere in `src` or `entrypoints` | audited |
+| Bundle under 150 KB gzipped | `npm run build` | ~44 KB gzipped |
+
+### Releasing
+
+```bash
+node scripts/release.mjs <version> "<summary>" <notes-file>
+```
+
+Bumps `package.json`, folds the notes into `CHANGELOG.md`, commits, tags and opens the GitHub
+release in one step.
+
 ## Documentation
 
 - [`docs/spec.md`](docs/spec.md) — the product specification this implementation follows

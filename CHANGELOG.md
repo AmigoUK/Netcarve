@@ -9,6 +9,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.0.0] — 2026-08-19
+
+First feature-complete release: every requirement in the specification (`docs/spec.md`) is
+implemented, tested and building.
+
+### Added
+- `docs/qa.md`: the manual QA checklist — install and permissions, the popup, the context-menu
+  flow on a real page, the planner walkthrough, keyboard-only operation, persistence across a
+  browser restart, export and import, the solver and conflict checker, dark mode, contrast, and
+  the pre-submission gates.
+- `docs/store-listing.md`: Chrome Web Store copy — name, short and long descriptions, the
+  single-purpose statement, per-permission justifications, the data-use declarations and the
+  screenshot shot list.
+- `docs/privacy.md`: the privacy policy to publish at attv.uk, listing exactly what is stored,
+  where, and what NetCarve does not do.
+- `DECISIONS.md` completed with the five decisions taken while building the solver, the
+  conflict sweep and the planner's state ownership.
+- Report exporters covered by tests, and README quality gates recording the measured figures.
+
+### Changed
+- The 512 px icon moved out of the extension bundle into `docs/store/`, where it belongs — the
+  manifest now ships exactly the five sizes Chrome asks for.
+
+### Verified for this release
+- 567 tests across 22 files, all passing.
+- `src/lib/ip/**` at 100 % statement, branch, function and line coverage; the whole of
+  `src/lib` at 98.4 % statements.
+- Manifest permissions are exactly `storage` and `contextMenus`, with no host permissions.
+- No `fetch`, `XMLHttpRequest`, WebSocket, remote font or remote asset anywhere in the source.
+- Production bundle: 149.8 KB on disk, **~44 KB gzipped** — comfortably inside the 150 KB
+  budget.
+- No `any` anywhere in `src/lib`; `tsc --noEmit` clean under `strict`.
+
 ## [0.13.0] — 2026-08-19
 
 ### Added
@@ -377,7 +410,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.0
 [0.13.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.13.0
 [0.12.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.12.0
 [0.11.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.11.0

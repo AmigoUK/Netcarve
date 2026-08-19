@@ -6,7 +6,7 @@
  * invariant that a node's children are its two halves.
  */
 
-import { formatCidr, parseCidr, type Cidr } from '../ip/cidr';
+import { formatCidr, type Cidr } from '../ip/cidr';
 import { contains, splitOnce } from '../ip/math';
 import type { PlanNode } from '../plan/model';
 import type { VlsmSolution } from './solver';
@@ -43,10 +43,4 @@ export function solutionToRoot(solution: VlsmSolution): PlanNode {
     name: entry.name,
   }));
   return build(solution.base, allocations);
-}
-
-/** Convenience for tests and callers holding only strings. */
-export function blockFromString(cidr: string): Cidr | undefined {
-  const parsed = parseCidr(cidr);
-  return parsed.ok ? parsed.value : undefined;
 }
