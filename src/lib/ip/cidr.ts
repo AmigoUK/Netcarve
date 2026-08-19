@@ -35,9 +35,14 @@ export function bitsOf(family: IpFamily): number {
   return family === 4 ? 32 : 128;
 }
 
+/** Renders a bare address value, given the family it belongs to. */
+export function formatAddressValue(family: IpFamily, address: number | bigint): string {
+  return family === 4 ? formatIPv4(address as number) : formatIPv6(address as bigint);
+}
+
 /** Renders just the address part of a block. */
 export function formatAddress(cidr: Cidr): string {
-  return cidr.family === 4 ? formatIPv4(cidr.address) : formatIPv6(cidr.address);
+  return formatAddressValue(cidr.family, cidr.address);
 }
 
 /** Renders a block as `address/prefix`, using the address exactly as it is held. */

@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.0.5] — 2026-08-19
+
+### Added
+- `src/lib/ip/math.ts`: `networkOf`, `networkAddressOf`, `lastAddressOf`, `broadcastOf`,
+  `totalAddresses`, `usableRange`, `contains`, `relationOf`, `splitOnce`, `compareCidr` and
+  `prefixForSize`.
+- `usableRange` implements spec §4.4 exactly: an IPv4 `/31` is an RFC 3021 point-to-point
+  link with both addresses usable, a `/32` is a host route, `/30` and shorter reserve the
+  network and broadcast addresses, and every IPv6 address counts as usable.
+- The alignment invariant — aligned CIDR blocks cannot partially overlap — is documented at
+  the top of the module, which is what lets `relationOf` answer with only four cases.
+- `formatAddressValue` in `cidr.ts` renders a raw address value for a given family.
+
+### Tests
+- 63 vectors covering every §4.4 edge case in both families, containment and relation
+  tables, splitting from `/0` down to the refusal at `/32` and `/128`, and sort ordering.
+
 ## [0.0.4] — 2026-08-19
 
 ### Added
@@ -58,7 +75,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.0.4...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.0.5...HEAD
+[0.0.5]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.5
 [0.0.4]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.4
 [0.0.3]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.3
 [0.0.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.2
