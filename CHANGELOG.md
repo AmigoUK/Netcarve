@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.5.0] — 2026-08-19
+
+### Added
+- The full-page app shell: hash router (`#/calc`, `#/projects`, `#/planner/:projectId`,
+  `#/vlsm`, `#/conflicts`, `#/settings`), wordmark, nav rail and the attv.uk credit footer on
+  every route.
+- `consumeQueryParam` reads `?q` once and rewrites the URL through `history.replaceState`, so
+  a refresh does not re-run a context-menu analysis (FR-CTX-04). The calculator route picks
+  the value up, including an unparsable selection, which shows the friendly error (FR-CTX-03).
+- The Settings view: theme (auto/light/dark, applied immediately and persisted), the /31
+  toggle, the export-footer toggle, the default copy format, the planner limit shown read-only
+  (DECISIONS D4), an About block, and Delete-all-data behind a typed `DELETE` confirmation
+  (FR-STOR-03).
+- A non-blocking `Toast` component for storage failures and export confirmations.
+
+### Tests
+- 28 further cases: the full route table, query parsing and one-shot consumption, navigation,
+  theme application and persistence, settings toggles, and the typed delete confirmation.
+
 ## [0.4.0] — 2026-08-19
 
 ### Added
@@ -174,7 +193,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.5.0
 [0.4.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.4.0
 [0.3.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.3.0
 [0.2.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.2.0

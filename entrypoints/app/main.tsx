@@ -1,3 +1,7 @@
 import { render } from 'preact';
+import { App } from './App';
+import './style.css';
 
-render(<div>NetCarve</div>, document.getElementById('root')!);
+const version = __NETCARVE_VERSION__;
+
+render(<App version={version} />, document.getElementById('root') as HTMLElement);

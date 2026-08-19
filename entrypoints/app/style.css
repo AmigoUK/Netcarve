@@ -1,0 +1,195 @@
+@import '../../src/styles/app.css';
+
+/* App shell ----------------------------------------------------------------- */
+
+.nc-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: var(--shell-max);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.nc-shell__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-5) 0 var(--space-3);
+  border-bottom: 1px solid var(--rule);
+}
+
+.nc-wordmark {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nc-wordmark__name {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.nc-wordmark__tagline {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.nc-nav {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.nc-nav__link {
+  padding: var(--space-1) var(--space-3);
+  border-bottom: 2px solid transparent;
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nc-nav__link:hover {
+  color: var(--accent);
+}
+
+.nc-nav__link.is-current {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+.nc-shell__body {
+  flex: 1 1 auto;
+  padding: var(--space-5) 0;
+}
+
+/* Page furniture ------------------------------------------------------------ */
+
+.nc-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.nc-title {
+  margin: 0;
+  font-size: var(--text-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.nc-subtitle {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.nc-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+}
+
+.nc-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.nc-hint {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.nc-hint--success {
+  color: var(--success);
+}
+
+/* Settings controls --------------------------------------------------------- */
+
+.nc-fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.nc-radios {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.nc-radio,
+.nc-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.nc-radio input,
+.nc-toggle input {
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+
+.nc-toggle__label {
+  display: block;
+  font-weight: 600;
+}
+
+.nc-toggle__hint {
+  display: block;
+  color: var(--ink-soft);
+  font-size: var(--text-xs);
+}
+
+.nc-field--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.nc-field--inline .nc-select {
+  width: auto;
+}
+
+.nc-input--small {
+  font-size: var(--text-sm);
+  max-width: 12rem;
+}
+
+.nc-danger-zone {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--rule);
+}
+
+@media (max-width: 40rem) {
+  .nc-shell__head {
+    align-items: flex-start;
+  }
+
+  .nc-section {
+    padding: var(--space-4);
+  }
+
+  .nc-title {
+    font-size: var(--text-xl);
+  }
+}
