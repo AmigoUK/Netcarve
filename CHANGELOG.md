@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.6.0] — 2026-08-19
+
+### Added
+- `src/lib/plan/model.ts`: the `Project` and `PlanNode` types from spec §9.5, the eight
+  palette tokens, `createProject`, and the validation that enforces the structural invariant —
+  a node's children are exactly `splitOnce(node.cidr)`. Loading re-validates every node,
+  repairs metadata that no longer makes sense (an unknown colour, a VLAN outside 1–4094) and
+  **quarantines a corrupt root** with a readable reason instead of crashing the app.
+- `src/lib/plan/tree.ts`: pure tree operations addressed by path — `splitNode`, `joinNode`,
+  `splitToPrefix`, `updateNode`, `nodeAt`, `flattenTree` (address order, collapsible),
+  `leavesOf`, `countLeaves`, `countNamedLeaves` and `utilisation`. Every operation returns a
+  new tree, which is what makes undo a matter of keeping the previous root.
+- `src/lib/plan/limits.ts`: the 1,024-leaf ceiling per root (FR-PLAN-04) and the VLAN bounds.
+  `splitToPrefix` refuses the whole operation rather than partly applying it, and computes the
+  resulting leaf count without building the tree first — so an IPv6 /32 → /96 carve is
+  declined instantly.
+
+### Tests
+- 50 cases: splitting and joining in both families, the §6 walkthrough shapes, the limit
+  boundary (a /16 carved to /26 is exactly 1,024 leaves and allowed; to /27 is refused),
+  metadata set and clear, structural sharing on update, utilisation including IPv6, every
+  invariant rejection, and project quarantine on load.
+
 ## [0.5.0] — 2026-08-19
 
 ### Added
@@ -193,7 +216,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.6.0
 [0.5.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.5.0
 [0.4.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.4.0
 [0.3.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.3.0
