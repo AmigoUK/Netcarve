@@ -10,6 +10,9 @@ import { strings } from '../../strings';
 import type { CalcResult } from '../calc/result';
 import type { Project } from '../plan/model';
 import { projectSections, PROJECT_COLUMNS } from './project';
+import { formatCidr } from '../ip/cidr';
+import { groupDigits } from '../format';
+import type { VlsmSolution } from '../vlsm/solver';
 
 /** Escapes the only character that can break a Markdown table cell. */
 export function escapeCell(value: string): string {
@@ -80,6 +83,54 @@ export function projectToMarkdown(project: Project, includeFooter = true): strin
       markdownTable([...PROJECT_COLUMNS], section.rows.map((row) => row.cells)),
     );
   }
+
+  return withFooter(lines.join('\n'), includeFooter);
+}
+
+const VLSM_COLUMNS = ['Name', 'Allocated block', 'Mask', 'Range', 'Usable', 'Waste'] as const;
+
+/** A solved VLSM allocation as Markdown (FR-VLSM-07). */
+export function vlsmToMarkdown(solution: VlsmSolution, includeFooter = true): string {
+  const lines: string[] = [
+    `## ${strings.vlsm.title} — ${formatCidr(solution.base)}`,
+    '',
+    markdownTable(
+      [...VLSM_COLUMNS],
+      solution.allocations.map((entry) => [
+        entry.name,
+        entry.summary.cidr,
+        entry.summary.mask,
+        entry.summary.range,
+        entry.summary.usable.primary,
+        entry.waste.toString(),
+      ]),
+    ),
+    '',
+    strings.vlsm.summary(
+      groupDigits(solution.allocatedAddresses),
+      groupDigits(solution.totalAddresses),
+      solution.utilisation,
+    ),
+  ];
+
+  if (solution.failure !== undefined) {
+    lines.push(
+      '',
+      `> ${strings.vlsm.shortfall(
+        solution.failure.name,
+        groupDigits(solution.failure.shortfall),
+      )}`,
+    );
+  }
+
+  lines.push(
+    '',
+    `**${strings.vlsm.freeBlocks}**`,
+    '',
+    solution.free.length === 0
+      ? `_${strings.vlsm.noFreeBlocks}_`
+      : solution.free.map((block) => `- \`${formatCidr(block)}\``).join('\n'),
+  );
 
   return withFooter(lines.join('\n'), includeFooter);
 }

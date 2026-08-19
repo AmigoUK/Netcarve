@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.11.0] — 2026-08-19
+
+### Added
+- The **VLSM solver view** at `#/vlsm` (F4): a base network, a reorderable list of
+  requirements with add and remove, and an allocation that recomputes as you type — no Solve
+  button needed. The results table shows name, allocated block, mask, range, usable and waste
+  in address order, followed by the leftover free blocks and a utilisation summary
+  (FR-VLSM-01/04).
+- A shortfall banner naming the requirement that did not fit and by how many addresses, with
+  everything allocated before it still on screen (FR-VLSM-05).
+- **Send to planner** (FR-VLSM-06): the allocation is rebuilt as a planner tree — splitting
+  only where an allocation actually sits, so the planner's structural invariant holds — and
+  becomes either a new project or a new root inside a chosen existing one, then opens it.
+- Markdown and CSV export of a solution (FR-VLSM-07), including the free-block list and the
+  shortfall note.
+- The `/31` toggle from Settings feeds straight into the solver, with a hint on the page when
+  it is on.
+
+### Tests
+- 9 further cases: the §7 acceptance vector rendered cell by cell, the shortfall message, the
+  IPv6-base refusal, requirement reordering and removal, the Markdown export, sending to a new
+  project, adding to an existing one, and the tree the converter produces.
+
 ## [0.10.0] — 2026-08-19
 
 ### Added
@@ -317,7 +340,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.11.0
 [0.10.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.10.0
 [0.9.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.9.0
 [0.8.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.8.0

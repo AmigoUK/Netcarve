@@ -188,6 +188,12 @@ export const strings = {
     shortfall: (name: string, shortfall: string) =>
       `${name} does not fit. The base network is ${shortfall} addresses short.`,
     sendToPlanner: 'Send to planner',
+    sendTarget: 'Add to',
+    newProject: 'A new project',
+    projectName: (base: string) => `VLSM plan for ${base}`,
+    removeRequirement: (name: string) => `Remove ${name === '' ? 'this requirement' : name}`,
+    requirementPlaceholder: 'Warehouse',
+    unnamedRequirement: 'Unnamed requirement',
     sentToPlanner: (project: string) => `Added to “${project}”.`,
     columns: {
       name: 'Name',

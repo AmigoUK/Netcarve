@@ -499,3 +499,67 @@
 .nc-exports {
   gap: var(--space-2);
 }
+
+/* VLSM ---------------------------------------------------------------------- */
+
+.nc-space-between {
+  justify-content: space-between;
+}
+
+.nc-requirements {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.nc-requirement {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.nc-input--hosts {
+  width: 6rem;
+}
+
+.nc-table-wrap {
+  overflow-x: auto;
+}
+
+.nc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.nc-table th {
+  text-align: left;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border-bottom: 1px solid var(--rule-strong);
+  padding: var(--space-1) var(--space-2);
+  white-space: nowrap;
+}
+
+.nc-table td {
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+
+.nc-free {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
