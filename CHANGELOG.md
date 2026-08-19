@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.7.0] — 2026-08-19
+
+### Added
+- `src/lib/plan/projects.ts`: load and save every project through `chrome.storage.local`,
+  find/upsert/remove, `touch` for `updatedAt`, and root management. `addRoot` stores the
+  canonical network form and **refuses a root that overlaps an existing one** in the same
+  project, decided with `relationOf`, so an identical block and a containing block are both
+  caught (FR-PLAN-02). Loading skips unusable entries and reports quarantined roots per
+  project rather than failing.
+- `src/lib/plan/history.ts`: the undo/redo stack (FR-PLAN-09) — `pushHistory`, `undo`,
+  `redo`, `canUndo`, `canRedo` and `replaceHistory` for in-progress typing. Bounded at 50
+  steps, comfortably above the required 20.
+
+### Tests
+- 17 further cases: canonical root storage, overlap refusal for identical/inner/outer blocks,
+  cross-family roots living happily side by side, list ordering by most recent update, a
+  storage round-trip, quarantine reporting, and the full undo/redo behaviour including the
+  redo stack being dropped and the bound being honoured.
+
 ## [0.6.0] — 2026-08-19
 
 ### Added
@@ -216,7 +235,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.7.0
 [0.6.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.6.0
 [0.5.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.5.0
 [0.4.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.4.0
