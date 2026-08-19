@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.4.0] — 2026-08-19
+
+### Added
+- The Quick Calculator (F1) as a single Preact view shared by the popup and, from the next
+  release, the `#/calc` route: debounced parsing at 150 ms, inline error copy, the IPv4 and
+  IPv6 field sets, reserved-range badges with a deprecated flag, the §4.4 notes, click-to-copy
+  on every value and a Copy-as-Markdown action (FR-CALC-01…06).
+- The **bit ruler** component — 32 cells for IPv4 grouped into octets, eight 16-bit groups for
+  IPv6 with the boundary group filled proportionally, and a hard rule at the prefix boundary.
+- The toolbar popup: restores the last input from `netcarve:calcLast` and carries the current
+  input into the full app (FR-CALC-07/08).
+- `src/styles/app.css` with the shared component styles, `src/ui/theme.ts` (theme application
+  and a settings hook), `src/ui/hooks.ts`, `src/ui/appUrl.ts`, the `AppFooter` credit line and
+  `src/lib/export/download.ts` (clipboard writes and object-URL downloads, no extra
+  permissions).
+- The package version is injected at build time and shown in the popup header.
+
+### Tests
+- 12 component tests with `@testing-library/preact`: the IPv4 and IPv6 result sets, ruler
+  structure, error appearing and clearing, the prefix stepper, clipboard copies of a single
+  value and of the whole Markdown table, and popup restore/open-app behaviour.
+
 ## [0.3.0] — 2026-08-19
 
 ### Added
@@ -152,7 +174,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.4.0
 [0.3.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.3.0
 [0.2.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.2.0
 [0.1.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.1.0

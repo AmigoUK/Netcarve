@@ -1,11 +1,17 @@
 import { defineConfig } from 'wxt';
 import preact from '@preact/preset-vite';
+import { readFileSync } from 'node:fs';
+
+const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as {
+  version: string;
+};
 
 // NetCarve is a local-first extension: the manifest asks for `storage` and
 // `contextMenus` and nothing else (NFR-PERM-01), and no code in the bundle
 // performs a network request (NFR-PERM-02).
 export default defineConfig({
   manifest: {
+    version: pkg.version,
     name: 'NetCarve — subnet calculator & address planner',
     short_name: 'NetCarve',
     description:
@@ -26,5 +32,9 @@ export default defineConfig({
   },
   vite: () => ({
     plugins: [preact()],
+    define: {
+      // The version is shown in the popup header and the app footer.
+      __NETCARVE_VERSION__: JSON.stringify(pkg.version),
+    },
   }),
 });

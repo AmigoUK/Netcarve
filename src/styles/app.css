@@ -1,0 +1,467 @@
+/* Shared component styles for both the popup and the full app. */
+
+@import './tokens.css';
+
+/* Buttons ------------------------------------------------------------------- */
+
+.nc-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.nc-button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.nc-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.nc-button--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.nc-button--primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: var(--accent-ink);
+}
+
+.nc-button--danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.nc-button--quiet {
+  border-color: transparent;
+  background: transparent;
+  padding: var(--space-1) var(--space-2);
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.nc-button--quiet:hover:not(:disabled) {
+  background: var(--panel-sunken);
+  color: var(--accent);
+}
+
+/* Fields -------------------------------------------------------------------- */
+
+.nc-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.nc-input,
+.nc-textarea,
+.nc-select {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--ink);
+}
+
+.nc-input {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  letter-spacing: -0.01em;
+}
+
+.nc-input::placeholder {
+  color: var(--ink-faint);
+  font-size: var(--text-sm);
+}
+
+.nc-textarea {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  min-height: 12rem;
+  resize: vertical;
+}
+
+.nc-input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.nc-error {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--danger);
+  color: var(--danger);
+  font-size: var(--text-sm);
+}
+
+.nc-empty {
+  margin: var(--space-4) 0;
+  padding: var(--space-4);
+  border: 1px dashed var(--rule-strong);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+/* Copyable ------------------------------------------------------------------ */
+
+.nc-copyable {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: 1px var(--space-1);
+  margin-left: calc(var(--space-1) * -1);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nc-copyable:hover {
+  background: var(--accent-wash);
+}
+
+.nc-copyable__hint {
+  opacity: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  transition: opacity 120ms ease;
+}
+
+.nc-copyable:hover .nc-copyable__hint,
+.nc-copyable:focus-visible .nc-copyable__hint,
+.nc-copyable.is-copied .nc-copyable__hint {
+  opacity: 1;
+}
+
+.nc-copyable.is-copied .nc-copyable__hint {
+  color: var(--success);
+}
+
+/* Calculator ---------------------------------------------------------------- */
+
+.nc-calc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.nc-calc__headline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--rule);
+}
+
+.nc-calc__network {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.nc-calc__prefix {
+  font-size: var(--text-xl);
+  color: var(--accent);
+}
+
+.nc-chip {
+  padding: 2px var(--space-2);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.nc-calc__actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* Prefix stepper ------------------------------------------------------------ */
+
+.nc-stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.nc-stepper .nc-label {
+  flex: 0 0 auto;
+}
+
+.nc-stepper__button {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  font-size: var(--text-base);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.nc-stepper__button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.nc-stepper__button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.nc-stepper__slider {
+  flex: 1 1 auto;
+  min-width: 4rem;
+  accent-color: var(--accent);
+}
+
+.nc-stepper__value {
+  min-width: 2.75rem;
+  text-align: right;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Bit ruler — the signature element ----------------------------------------- */
+
+.nc-ruler__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.nc-ruler__hint {
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+}
+
+.nc-ruler__cells {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.nc-ruler__cell {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0.75rem;
+  padding: var(--space-1) 0;
+  background: var(--bit-host);
+  color: var(--bit-host-ink);
+  font-size: var(--text-xs);
+  text-align: center;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.nc-ruler__cells[data-family='6'] .nc-ruler__cell {
+  min-width: 3.5rem;
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+}
+
+.nc-ruler__cell.is-network {
+  background: var(--bit-network);
+  color: var(--bit-network-ink);
+  font-weight: 600;
+}
+
+/* The group the prefix boundary falls inside is filled proportionally. */
+.nc-ruler__cell.is-partial {
+  background: linear-gradient(
+    to right,
+    var(--bit-network) 0 var(--fill),
+    var(--bit-host) var(--fill) 100%
+  );
+}
+
+.nc-ruler__cell.is-group-start {
+  margin-left: var(--space-1);
+}
+
+.nc-ruler__cell.is-boundary::before {
+  content: '';
+  position: absolute;
+  inset-block: -4px;
+  inset-inline-start: -1px;
+  width: 2px;
+  background: var(--bit-boundary);
+}
+
+.nc-ruler__cell:first-child {
+  border-inline-start: 1px solid var(--rule);
+  border-start-start-radius: var(--radius-sm);
+  border-end-start-radius: var(--radius-sm);
+}
+
+.nc-ruler__cell:last-child {
+  border-inline-end: 1px solid var(--rule);
+  border-start-end-radius: var(--radius-sm);
+  border-end-end-radius: var(--radius-sm);
+}
+
+/* Value grid ---------------------------------------------------------------- */
+
+.nc-values {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--space-1) var(--space-5);
+  margin: 0;
+}
+
+.nc-calc--compact .nc-values {
+  grid-template-columns: 1fr;
+}
+
+.nc-values__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.nc-values__row dt {
+  flex: 0 0 auto;
+}
+
+.nc-values__row dd {
+  margin: 0;
+  text-align: right;
+  font-size: var(--text-sm);
+}
+
+.nc-values__approx {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+}
+
+/* Badges and notes ---------------------------------------------------------- */
+
+.nc-specials__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--panel-sunken);
+  font-size: var(--text-xs);
+}
+
+.nc-badge code {
+  color: var(--ink-soft);
+}
+
+.nc-badge__flag {
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--warning-wash);
+  color: var(--warning);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.nc-notes {
+  margin: 0;
+  padding-left: var(--space-4);
+  color: var(--ink-soft);
+  font-size: var(--text-xs);
+}
+
+.nc-notes li {
+  margin-bottom: 2px;
+}
+
+/* Credit footer ------------------------------------------------------------- */
+
+.nc-credit {
+  margin-top: var(--space-6);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--rule);
+  color: var(--ink-faint);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+.nc-credit a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.nc-credit a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.nc-credit__dot {
+  margin: 0 var(--space-2);
+  color: var(--rule-strong);
+}
+
+/* Toast --------------------------------------------------------------------- */
+
+.nc-toast {
+  position: fixed;
+  inset-block-end: var(--space-4);
+  inset-inline: 0;
+  margin-inline: auto;
+  width: max-content;
+  max-width: min(30rem, 90vw);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 18%);
+  font-size: var(--text-sm);
+  z-index: 20;
+}
+
+.nc-toast--error {
+  border-color: var(--danger);
+  color: var(--danger);
+}

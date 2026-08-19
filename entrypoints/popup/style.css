@@ -1,0 +1,52 @@
+@import '../../src/styles/app.css';
+
+body {
+  width: var(--popup-width);
+  min-height: 12rem;
+  background: var(--surface);
+}
+
+.nc-popup {
+  display: flex;
+  flex-direction: column;
+  max-height: 600px;
+}
+
+.nc-popup__head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--rule);
+  background: var(--panel);
+}
+
+.nc-popup__mark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.nc-popup__mark-name {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.nc-popup__mark-version {
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+}
+
+.nc-popup__body {
+  padding: var(--space-3);
+  overflow-y: auto;
+}
+
+/* The popup is 400px wide: keep the rulers legible by letting them scroll. */
+.nc-popup .nc-ruler__cells[data-family='6'] .nc-ruler__cell {
+  min-width: 3rem;
+}

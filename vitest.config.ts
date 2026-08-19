@@ -2,8 +2,17 @@ import { defineConfig } from 'vitest/config';
 import preact from '@preact/preset-vite';
 import { fileURLToPath } from 'node:url';
 
+import { readFileSync } from 'node:fs';
+
+const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as {
+  version: string;
+};
+
 export default defineConfig({
   plugins: [preact()],
+  define: {
+    __NETCARVE_VERSION__: JSON.stringify(pkg.version),
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./', import.meta.url)),
