@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.0.6] — 2026-08-19
+
+### Added
+- `src/lib/ip/tokens.ts`: `findIpTokens(text)` scans free text for IPv4/IPv6/CIDR tokens and
+  returns each one with its source offset and parsed block — the input side of the context
+  menu (F6).
+- Regular expressions only produce candidates; every candidate is validated through
+  `parseCidr`, so MAC addresses, timestamps, version strings and out-of-range octets are
+  discarded. A candidate whose suffix fails is retried as a bare address, so
+  `10.0.0.1 10.0.0.2` yields both addresses rather than nothing.
+
+### Tests
+- 24 cases: punctuation-wrapped tokens, sentence-ending prefixes (`192.168.10.0/24.`),
+  `[2001:db8::1]:443`, zone IDs, IPv4-mapped IPv6, address-and-mask pairs, multi-line
+  selections, and ten near-misses that must find nothing (`999.1.1.1`, `1.2.3.4000`,
+  `v1.2.3.4-beta`, `00:1a:2b:3c:4d:5e`, `10:30:45`, `16:9`, …).
+
 ## [0.0.5] — 2026-08-19
 
 ### Added
@@ -75,7 +92,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.0.5...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.0.6...HEAD
+[0.0.6]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.6
 [0.0.5]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.5
 [0.0.4]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.4
 [0.0.3]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.3
