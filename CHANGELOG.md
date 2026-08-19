@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.0.4] — 2026-08-19
+
+### Added
+- `src/lib/ip/cidr.ts`: the `Cidr` value type (a discriminated union on `family`, so IPv4
+  narrows to `number` and IPv6 to `bigint`), plus `parseCidr`, `formatCidr`,
+  `formatAddress`, `makeCidr` and `bitsOf`.
+- `parseCidr` accepts `addr`, `addr/prefix`, and — for IPv4 — both `addr mask` and
+  `addr/mask` with a contiguous dotted mask. A bare address becomes `/32` or `/128` with an
+  `ASSUMED_HOST_PREFIX` warning, and an address carrying bits below the prefix boundary is
+  accepted with a `HOST_BITS_SET` warning (spec §4.4: never an error).
+
+### Tests
+- 33 vectors: both families, both mask spellings, warning propagation from the IPv6 zone-ID
+  parser, the /0 and /32 extremes, and every rejection code (`BAD_PREFIX`, `BAD_FORM`,
+  `MASK_NOT_SUPPORTED`, `NONCONTIGUOUS_MASK` and the underlying address errors).
+
 ## [0.0.3] — 2026-08-19
 
 ### Added
@@ -42,7 +58,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.0.3...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.0.4...HEAD
+[0.0.4]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.4
 [0.0.3]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.3
 [0.0.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.2
 [0.0.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.1
