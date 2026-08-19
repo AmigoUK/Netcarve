@@ -8,7 +8,21 @@ declare const chrome: {
       clear(): Promise<void>;
     };
   };
-  runtime: { getURL(path: string): string; id: string };
-  contextMenus: unknown;
+  runtime: {
+    getURL(path: string): string;
+    id: string;
+    lastError?: { message?: string };
+  };
+  contextMenus: {
+    create(
+      properties: { id: string; title: string; contexts: string[] },
+      callback?: () => void,
+    ): void;
+    update(
+      id: string,
+      properties: { title?: string; contexts?: string[] },
+      callback?: () => void,
+    ): void;
+  };
   tabs: { create(options: { url: string }): Promise<unknown> };
 };

@@ -32,6 +32,12 @@ export default defineConfig({
   },
   vite: () => ({
     plugins: [preact()],
+    build: {
+      // Extension pages load from disk, so preloading buys nothing — and Vite's polyfill
+      // would put a literal `fetch(` in the bundle (NFR-PERM-02 says there is none) and
+      // make Chrome log a cross-world preload warning on every page load.
+      modulePreload: false,
+    },
     define: {
       // The version is shown in the popup header and the app footer.
       __NETCARVE_VERSION__: JSON.stringify(pkg.version),

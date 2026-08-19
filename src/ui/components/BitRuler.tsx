@@ -21,7 +21,9 @@ export function BitRuler({ ruler, family }: BitRulerProps) {
         <span class="nc-label">{ruler.title}</span>
         <span class="nc-ruler__hint">{strings.calc.binaryHint}</span>
       </div>
-      <ol class="nc-ruler__cells" data-family={family}>
+      {/* The strip scrolls sideways in the popup, so it has to be reachable by keyboard
+          (WCAG 2.1.1) — otherwise the bits past the fold cannot be read at all. */}
+      <ol class="nc-ruler__cells" data-family={family} tabIndex={0}>
         {ruler.cells.map((cell, index) => {
           const fraction = cell.networkBits / cell.totalBits;
           const partial = fraction > 0 && fraction < 1;

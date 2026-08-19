@@ -1,7 +1,7 @@
 {
   "name": "netcarve",
-  "version": "1.0.0",
-  "description": "IP subnet calculator, visual address planner and VLSM solver \u2014 entirely on-device.",
+  "version": "1.0.1",
+  "description": "IP subnet calculator, visual address planner and VLSM solver — entirely on-device.",
   "private": true,
   "type": "module",
   "author": "Tomasz 'Amigo' Lewandowski <dev@attv.uk>",
@@ -28,12 +28,14 @@
     "preact": "^10.29.8"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.62.1",
     "@preact/preset-vite": "^2.10.6",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/preact": "^3.2.4",
     "@types/node": "^26.2.0",
     "@vitest/coverage-v8": "^4.1.11",
+    "axe-core": "^4.13.0",
     "jsdom": "^30.0.1",
     "typescript": "^7.0.2",
     "vitest": "^4.1.11",

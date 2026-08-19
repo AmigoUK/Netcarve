@@ -9,6 +9,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.0.1] — 2026-08-19
+
+### Added
+- An end-to-end suite (Playwright, 91 tests) that drives the real MV3 build in Chrome rather
+  than a jsdom stand-in: packaging and manifest invariants, the popup, every view, the
+  context-menu contract, exports and imports through real downloads and file pickers, storage
+  persistence across reloads, and a privacy sweep that fails if anything in the bundle can
+  reach the network.
+- Automated WCAG 2.1 A/AA auditing (axe-core) on every route, in both themes and in the popup.
+
+### Fixed
+- The prefix stepper computed from the debounced result, so two clicks inside 150 ms both used
+  the same stale prefix and the second was swallowed. It now steps from a pending value that
+  re-syncs when a fresh result lands.
+- `--ink-faint`, the colour of every micro-label and hint, failed WCAG AA: 3.0:1 against the
+  page in the light theme and 4.2:1 against a panel in the dark one. Both are now above 4.7:1.
+- The bit ruler scrolls sideways in the popup but could not be reached by keyboard, so the bits
+  past the fold were unreadable without a mouse (WCAG 2.1.1).
+
+### Changed
+- Module preloading is off in the build. Extension pages load from disk, so it bought nothing —
+  but Vite's polyfill put a literal `fetch(` in the bundle, which contradicts the store
+  listing's "no network requests at all", and made Chrome log a cross-world preload warning on
+  every page load.
+
 ## [1.0.0] — 2026-08-19
 
 First feature-complete release: every requirement in the specification (`docs/spec.md`) is
@@ -410,7 +435,8 @@ implemented, tested and building.
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.1
 [1.0.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.0
 [0.13.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.13.0
 [0.12.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.12.0
