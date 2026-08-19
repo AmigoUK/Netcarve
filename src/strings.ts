@@ -29,6 +29,7 @@ export const strings = {
     copy: 'Copy',
     copied: 'Copied',
     copyAsMarkdown: 'Copy as Markdown',
+    copyAsText: 'Copy as text',
     copyValue: (label: string) => `Copy ${label}`,
     cancel: 'Cancel',
     confirm: 'Confirm',

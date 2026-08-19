@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef } from 'preact/hooks';
 import { buildCalcResult, type CalcResult } from '../../lib/calc/result';
 import { calcToMarkdown } from '../../lib/export/markdown';
+import { calcToPlain } from '../../lib/export/plain';
+import type { CopyFormat } from '../../lib/storage/settings';
 import { copyText } from '../../lib/export/download';
 import { bitsOf, formatAddress } from '../../lib/ip/cidr';
 import { strings } from '../../strings';
@@ -15,6 +17,8 @@ interface CalculatorProps {
   compact?: boolean;
   /** Whether Markdown exports carry the NetCarve credit line. */
   exportFooter?: boolean;
+  /** The Settings default: a Markdown table, or the same content as plain text. */
+  copyFormat?: CopyFormat;
 }
 
 const DEBOUNCE_MS = 150;
@@ -24,6 +28,7 @@ export function Calculator({
   onChange,
   compact = false,
   exportFooter = true,
+  copyFormat = 'markdown',
 }: CalculatorProps) {
   const debounced = useDebouncedValue(value, DEBOUNCE_MS);
   const outcome = useMemo(
@@ -123,12 +128,17 @@ export function Calculator({
               type="button"
               class="nc-button"
               onClick={() => {
-                void copyText(calcToMarkdown(result, exportFooter)).then((done) => {
+                const render = copyFormat === 'plain' ? calcToPlain : calcToMarkdown;
+                void copyText(render(result, exportFooter)).then((done) => {
                   if (done) confirmMarkdown();
                 });
               }}
             >
-              {copiedMarkdown ? strings.common.copied : strings.common.copyAsMarkdown}
+              {copiedMarkdown
+                ? strings.common.copied
+                : copyFormat === 'plain'
+                  ? strings.common.copyAsText
+                  : strings.common.copyAsMarkdown}
             </button>
           </div>
         </>

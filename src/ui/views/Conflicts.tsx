@@ -1,15 +1,18 @@
 import { useMemo, useState } from 'preact/hooks';
 import { checkConflicts } from '../../lib/conflict/checker';
 import { conflictsToMarkdown } from '../../lib/export/markdown';
+import { conflictsToPlain } from '../../lib/export/plain';
+import type { CopyFormat } from '../../lib/storage/settings';
 import { strings } from '../../strings';
 import { ExportBar } from '../components/ExportBar';
 
 interface ConflictsProps {
   exportFooter: boolean;
+  copyFormat: CopyFormat;
 }
 
 /** The conflict checker (F5) — a paste box and a report that updates as you type. */
-export function Conflicts({ exportFooter }: ConflictsProps) {
+export function Conflicts({ exportFooter, copyFormat }: ConflictsProps) {
   const [text, setText] = useState('');
   const report = useMemo(() => checkConflicts(text), [text]);
   const hasInput = report.entries.length > 0 || report.errors.length > 0;
@@ -44,6 +47,8 @@ export function Conflicts({ exportFooter }: ConflictsProps) {
             <ExportBar
               name="netcarve-conflicts"
               markdown={() => conflictsToMarkdown(report, exportFooter)}
+              plain={() => conflictsToPlain(report, exportFooter)}
+              copyFormat={copyFormat}
             />
           </header>
 

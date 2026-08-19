@@ -4,6 +4,8 @@ import { formatCidr } from '../../lib/ip/cidr';
 import type { Project } from '../../lib/plan/model';
 import { vlsmToCsv } from '../../lib/export/csv';
 import { vlsmToMarkdown } from '../../lib/export/markdown';
+import { vlsmToPlain } from '../../lib/export/plain';
+import type { CopyFormat } from '../../lib/storage/settings';
 import { solveVlsm, type VlsmRequirement, type VlsmSolution } from '../../lib/vlsm/solver';
 import { solutionToRoot } from '../../lib/vlsm/toPlan';
 import { strings } from '../../strings';
@@ -12,6 +14,7 @@ import { ExportBar } from '../components/ExportBar';
 interface VlsmProps {
   allowSlash31: boolean;
   exportFooter: boolean;
+  copyFormat: CopyFormat;
   projects: readonly Project[];
   /** Creates a new project holding the solution, or adds it as a root to an existing one. */
   onSendToPlanner: (targetProjectId: string | undefined, solution: VlsmSolution) => void;
@@ -25,7 +28,13 @@ let nextId = 1;
 
 const emptyRow = (): Row => ({ id: nextId++, name: '', requiredHosts: 0 });
 
-export function Vlsm({ allowSlash31, exportFooter, projects, onSendToPlanner }: VlsmProps) {
+export function Vlsm({
+  allowSlash31,
+  exportFooter,
+  copyFormat,
+  projects,
+  onSendToPlanner,
+}: VlsmProps) {
   const [base, setBase] = useState('');
   const [rows, setRows] = useState<Row[]>(() => [emptyRow()]);
   const [target, setTarget] = useState('');
@@ -173,6 +182,8 @@ export function Vlsm({ allowSlash31, exportFooter, projects, onSendToPlanner }: 
             <ExportBar
               name={`vlsm-${formatCidr(solution.base)}`}
               markdown={() => vlsmToMarkdown(solution, exportFooter)}
+              plain={() => vlsmToPlain(solution, exportFooter)}
+              copyFormat={copyFormat}
               csv={() => vlsmToCsv(solution)}
             />
           </header>

@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.1.0] — 2026-08-19
+
+### Added
+- Plain-text export. Settings has offered a **Default copy format** of Markdown or plain text
+  since 1.0.0, but nothing read it: every copy button produced a Markdown table whatever the
+  setting said. Choosing *Plain text* now switches the calculator, the planner, the solver and
+  the conflict checker to a space-aligned rendering of exactly the same content — same fields,
+  same columns, same credit line — and relabels the button *Copy as text*. For a ticket, a
+  terminal or an email that renders nothing.
+- Fault-injection coverage for the paths a user cannot click their way to: a refused storage
+  write (the plan stays on screen and stays editable, with the "could not save" notice shown),
+  a corrupt root quarantined on load without taking its project with it, and an unreadable
+  settings blob falling back to the defaults.
+
 ## [1.0.2] — 2026-08-19
 
 ### Fixed
@@ -452,7 +466,8 @@ implemented, tested and building.
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.0
 [1.0.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.2
 [1.0.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.1
 [1.0.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.0

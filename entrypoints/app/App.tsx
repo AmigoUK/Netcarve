@@ -2,6 +2,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { downloadText } from '@/src/lib/export/download';
 import { projectsToJson, projectToJson } from '@/src/lib/export/json';
 import { projectToMarkdown } from '@/src/lib/export/markdown';
+import { projectToPlain } from '@/src/lib/export/plain';
 import { projectToCsv } from '@/src/lib/export/csv';
 import { findProject, upsertProject } from '@/src/lib/plan/projects';
 import { removeValue, STORAGE_KEYS } from '@/src/lib/storage/store';
@@ -167,6 +168,8 @@ export function App({ version }: AppProps) {
                 <ExportBar
                   name={openProject.name}
                   markdown={() => projectToMarkdown(openProject, settings.settings.exportFooter)}
+                  plain={() => projectToPlain(openProject, settings.settings.exportFooter)}
+                  copyFormat={settings.settings.defaultCopyFormat}
                   csv={() => projectToCsv(openProject)}
                   json={() => projectToJson(openProject)}
                 />
@@ -178,6 +181,7 @@ export function App({ version }: AppProps) {
           <Vlsm
             allowSlash31={settings.settings.allowSlash31}
             exportFooter={settings.settings.exportFooter}
+            copyFormat={settings.settings.defaultCopyFormat}
             projects={projects.projects}
             onSendToPlanner={(targetId, solution) => {
               const root = solutionToRoot(solution);
@@ -203,7 +207,10 @@ export function App({ version }: AppProps) {
         )}
 
         {route.name === 'conflicts' && (
-          <Conflicts exportFooter={settings.settings.exportFooter} />
+          <Conflicts
+            exportFooter={settings.settings.exportFooter}
+            copyFormat={settings.settings.defaultCopyFormat}
+          />
         )}
 
         {route.name === 'calc' && (
@@ -214,6 +221,7 @@ export function App({ version }: AppProps) {
                 value={calcInput}
                 onChange={setCalcInput}
                 exportFooter={settings.settings.exportFooter}
+                copyFormat={settings.settings.defaultCopyFormat}
               />
             </section>
           </div>

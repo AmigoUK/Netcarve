@@ -58,6 +58,7 @@ export function Popup({ version }: PopupProps) {
           onChange={setValue}
           compact
           exportFooter={settings.exportFooter}
+          copyFormat={settings.defaultCopyFormat}
         />
       </main>
     </div>
