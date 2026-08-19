@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.1.0] — 2026-08-19
+
+### Added
+- `src/lib/ip/special.ts`: both special-range tables from spec §4.3 in full (16 IPv4 rows,
+  16 IPv6 rows, each with a label, a one-line note and a `deprecated` flag where it applies)
+  plus `lookupSpecial`, which returns **every** range covering the input's network address,
+  most specific first (FR-INTEL-01/02).
+- `src/lib/ip/index.ts`: the public barrel for the domain library.
+- `.github/workflows/ci.yml`: type check, tests with coverage, and a production build on
+  every push and pull request.
+
+### Changed
+- The IP domain library now holds **100 % statement, branch, function and line coverage**,
+  and `vitest.config.ts` fails the run below that (NFR-QUAL-01). This completes milestone M1's
+  library half: 283 tests across `errors`, `v4`, `v6`, `cidr`, `math`, `tokens` and `special`.
+
 ## [0.0.6] — 2026-08-19
 
 ### Added
@@ -92,7 +108,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.0.6...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.1.0
 [0.0.6]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.6
 [0.0.5]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.5
 [0.0.4]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.4

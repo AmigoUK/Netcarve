@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      # NFR-QUAL-01: src/lib/ip must hold 100 % branch coverage — the thresholds in
+      # vitest.config.ts make this step fail if it slips.
+      - name: Tests and coverage
+        run: npm run coverage
+
+      - name: Production build
+        run: npm run build

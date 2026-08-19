@@ -206,6 +206,17 @@ describe('compareCidr', () => {
 
     expect(sorted).toEqual(['10.0.0.0/8', '10.0.0.0/16', '10.1.0.0/16', '::/0', '2001:db8::/32']);
   });
+
+  it('is antisymmetric', () => {
+    const low = block('10.0.0.0/8');
+    const high = block('10.1.0.0/16');
+    expect(compareCidr(low, high)).toBeLessThan(0);
+    expect(compareCidr(high, low)).toBeGreaterThan(0);
+    expect(compareCidr(low, low)).toBe(0);
+    expect(compareCidr(block('10.0.0.0/8'), block('10.0.0.0/16'))).toBeLessThan(0);
+    expect(compareCidr(block('10.0.0.0/16'), block('10.0.0.0/8'))).toBeGreaterThan(0);
+    expect(compareCidr(block('2001:db8::/32'), block('10.0.0.0/8'))).toBeGreaterThan(0);
+  });
 });
 
 describe('prefixForSize', () => {

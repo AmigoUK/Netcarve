@@ -35,6 +35,14 @@ describe('findIpTokens', () => {
     expect(texts('servers 10.0.0.1 10.0.0.2')).toEqual(['10.0.0.1', '10.0.0.2']);
   });
 
+  it('reports nothing when both the block and the bare address are invalid', () => {
+    expect(texts('bogus 999.1.1.1/24 here')).toEqual([]);
+  });
+
+  it('still reports the second half of a broken pair when it is a valid address', () => {
+    expect(texts('bogus 999.1.1.1 255.255.255.0 here')).toEqual(['255.255.255.0']);
+  });
+
   it('falls back to the bare address when the prefix is out of range', () => {
     expect(blocks('10.0.0.1/33')).toEqual(['10.0.0.1/32']);
   });
