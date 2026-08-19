@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.13.0] — 2026-08-19
+
+### Added
+- The background service worker (F6). It registers exactly one context-menu item — id
+  `netcarve-analyse`, `contexts: ["selection"]`, title `Analyse "%s" in NetCarve` — and does
+  nothing else: no network, no storage, no other listeners (FR-CTX-01).
+- Clicking it runs `findIpTokens` over the selection and opens the app at
+  `#/calc?q=<token>` for the first valid address or block; when the selection holds none, the
+  raw text is passed through truncated to 128 characters so the user sees the friendly parse
+  error rather than nothing happening (FR-CTX-02/03).
+- The integration lives in `src/lib/menu.ts` behind a small API interface, so it is tested
+  against a fake `chrome` rather than needing a browser.
+
+### Tests
+- 10 cases: token extraction from punctuation-wrapped and prose selections, the address-and-mask
+  form, the truncating fallback, an absent selection, single-item registration after clearing
+  any previous one, tab opening with the right URL, and clicks on other menu items ignored.
+
 ## [0.12.0] — 2026-08-19
 
 ### Added
@@ -359,7 +377,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.13.0
 [0.12.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.12.0
 [0.11.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.11.0
 [0.10.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.10.0
