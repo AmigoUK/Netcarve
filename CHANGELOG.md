@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.12.0] — 2026-08-19
+
+### Added
+- The **conflict checker** (F5) at `#/conflicts`: paste one entry per line — CIDR, bare
+  address or `addr mask` — with blank lines and `#` comments ignored, and unreadable lines
+  reported by number without aborting the run (FR-CONF-01).
+- Findings are grouped into identical blocks (with the lines they appeared on) and containment
+  chains rendered outermost first, e.g. `10.0.0.0/8 ⊃ 10.1.0.0/16 ⊃ 10.1.2.0/24`, with the
+  report stating explicitly that aligned CIDR blocks cannot partially overlap (FR-CONF-03).
+- A positive "no overlaps found across N blocks" state (FR-CONF-04), IPv4 and IPv6 compared
+  independently (FR-CONF-02), and Markdown export of the whole report (FR-CONF-06).
+- The analysis is a sort plus a single stack sweep rather than a pairwise scan (FR-CONF-05).
+
+### Tests
+- 29 further cases: parsing, comments, rebasing to the network address, per-line error
+  reporting, chain construction, cross-family independence, and the UI. Correctness is checked
+  against a brute-force O(n²) oracle over eight seeded random inputs, and two performance tests
+  confirm 1,000 lines complete well inside the one-second budget.
+
 ## [0.11.0] — 2026-08-19
 
 ### Added
@@ -340,7 +359,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.12.0
 [0.11.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.11.0
 [0.10.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.10.0
 [0.9.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.9.0

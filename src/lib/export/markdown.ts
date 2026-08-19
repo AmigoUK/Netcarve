@@ -13,6 +13,7 @@ import { projectSections, PROJECT_COLUMNS } from './project';
 import { formatCidr } from '../ip/cidr';
 import { groupDigits } from '../format';
 import type { VlsmSolution } from '../vlsm/solver';
+import type { ConflictReport } from '../conflict/checker';
 
 /** Escapes the only character that can break a Markdown table cell. */
 export function escapeCell(value: string): string {
@@ -131,6 +132,40 @@ export function vlsmToMarkdown(solution: VlsmSolution, includeFooter = true): st
       ? `_${strings.vlsm.noFreeBlocks}_`
       : solution.free.map((block) => `- \`${formatCidr(block)}\``).join('\n'),
   );
+
+  return withFooter(lines.join('\n'), includeFooter);
+}
+
+/** A conflict report as Markdown (FR-CONF-06). */
+export function conflictsToMarkdown(report: ConflictReport, includeFooter = true): string {
+  const lines: string[] = [`## ${strings.conflicts.title}`, ''];
+
+  if (report.clean) {
+    lines.push(strings.conflicts.clean(report.blockCount));
+  } else {
+    if (report.identical.length > 0) {
+      lines.push(`### ${strings.conflicts.identical}`, '');
+      for (const group of report.identical) {
+        lines.push(`- \`${group.cidr}\` — lines ${group.lines.join(', ')}`);
+      }
+      lines.push('');
+    }
+    if (report.containment.length > 0) {
+      lines.push(`### ${strings.conflicts.containment}`, '');
+      for (const chain of report.containment) {
+        lines.push(`- ${chain.blocks.map((block) => `\`${block.cidr}\``).join(' ⊃ ')}`);
+      }
+      lines.push('');
+    }
+    lines.push(`> ${strings.conflicts.alignmentNote}`);
+  }
+
+  if (report.errors.length > 0) {
+    lines.push('', `### ${strings.conflicts.invalidLines(report.errors.length)}`, '');
+    for (const error of report.errors) {
+      lines.push(`- ${strings.conflicts.lineError(error.line, error.text, error.message)}`);
+    }
+  }
 
   return withFooter(lines.join('\n'), includeFooter);
 }

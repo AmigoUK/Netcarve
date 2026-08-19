@@ -18,6 +18,7 @@ import { Planner } from '@/src/ui/views/Planner';
 import { Projects } from '@/src/ui/views/Projects';
 import { SettingsView } from '@/src/ui/views/Settings';
 import { Vlsm } from '@/src/ui/views/Vlsm';
+import { Conflicts } from '@/src/ui/views/Conflicts';
 import { solutionToRoot } from '@/src/lib/vlsm/toPlan';
 import { createProject } from '@/src/lib/plan/model';
 import { formatCidr } from '@/src/lib/ip/cidr';
@@ -31,6 +32,7 @@ const NAV: ReadonlyArray<{ name: RouteName; path: string; label: string }> = [
   { name: 'calc', path: '/calc', label: strings.nav.calculator },
   { name: 'projects', path: '/projects', label: strings.nav.projects },
   { name: 'vlsm', path: '/vlsm', label: strings.nav.vlsm },
+  { name: 'conflicts', path: '/conflicts', label: strings.nav.conflicts },
   { name: 'settings', path: '/settings', label: strings.nav.settings },
 ];
 
@@ -198,6 +200,10 @@ export function App({ version }: AppProps) {
               navigate(`/planner/${updated.id}`);
             }}
           />
+        )}
+
+        {route.name === 'conflicts' && (
+          <Conflicts exportFooter={settings.settings.exportFooter} />
         )}
 
         {route.name === 'calc' && (

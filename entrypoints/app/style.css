@@ -563,3 +563,35 @@
   font-size: var(--text-sm);
   color: var(--ink-soft);
 }
+
+/* Conflicts ----------------------------------------------------------------- */
+
+.nc-findings {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.nc-findings li {
+  margin-bottom: var(--space-1);
+}
+
+.nc-findings__arrow {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.nc-findings--errors {
+  color: var(--danger);
+}
+
+.nc-result {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--success);
+  border-radius: var(--radius);
+  background: var(--success-wash);
+  color: var(--success);
+  font-weight: 600;
+}
