@@ -40,6 +40,14 @@ npm run zip         # store-ready archive
 npm test            # unit and component tests (Vitest)
 npm run coverage    # coverage; src/lib/ip must stay at 100 % branches
 npm run typecheck   # tsc --noEmit
+npm run test:e2e    # end-to-end suite against the real build (Playwright + Chrome)
+npm run screenshots # regenerate the Chrome Web Store assets in docs/store/
+```
+
+On a headless machine the browser needs a display, so use the wrapped variants:
+
+```bash
+npm run test:e2e:xvfb
 ```
 
 Load the unpacked extension from `.output/chrome-mv3` via `chrome://extensions` → *Load unpacked*.
@@ -49,9 +57,10 @@ Load the unpacked extension from `.output/chrome-mv3` via `chrome://extensions` 
 | Gate | Where | Status |
 |---|---|---|
 | 100 % branch coverage of `src/lib/ip` | `vitest.config.ts` thresholds, enforced in CI | enforced |
-| Manifest permissions limited to `storage` + `contextMenus` | `wxt.config.ts` | enforced |
-| No network requests at runtime | no `fetch`/`XMLHttpRequest`/remote assets anywhere in `src` or `entrypoints` | audited |
-| Bundle under 150 KB gzipped | `npm run build` | ~44 KB gzipped |
+| Manifest permissions limited to `storage` + `contextMenus` | `tests/e2e/extension.spec.ts` | enforced |
+| No network call anywhere in the shipped bundle | `tests/e2e/privacy.spec.ts` — static scan plus a live request monitor across every view | enforced |
+| No WCAG 2.1 A/AA violations | `tests/e2e/a11y.spec.ts` — axe-core on every route, both themes and the popup | enforced |
+| Bundle under 150 KB gzipped | `tests/e2e/privacy.spec.ts` | enforced (~44 KB) |
 
 ### Releasing
 
@@ -69,6 +78,8 @@ release in one step.
 - [`DECISIONS.md`](DECISIONS.md) — engineering decisions and resolved open questions
 - [`CHANGELOG.md`](CHANGELOG.md) — release history
 - [`docs/qa.md`](docs/qa.md) — manual QA checklist
+- [`docs/store-listing.md`](docs/store-listing.md) — the Chrome Web Store submission sheet, with
+  every field ready to paste and the asset checklist
 
 ## Credits
 
