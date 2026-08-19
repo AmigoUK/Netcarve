@@ -1,7 +1,7 @@
 {
   "name": "netcarve",
   "version": "1.0.0",
-  "description": "IP subnet calculator, visual address planner and VLSM solver — entirely on-device.",
+  "description": "IP subnet calculator, visual address planner and VLSM solver \u2014 entirely on-device.",
   "private": true,
   "type": "module",
   "author": "Tomasz 'Amigo' Lewandowski <dev@attv.uk>",
@@ -19,12 +19,16 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "test:e2e": "wxt build && playwright test",
+    "test:e2e:xvfb": "wxt build && xvfb-run -a playwright test",
+    "screenshots": "wxt build && xvfb-run -a playwright test --config playwright.store.config.ts"
   },
   "dependencies": {
     "preact": "^10.29.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@preact/preset-vite": "^2.10.6",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/preact": "^3.2.4",

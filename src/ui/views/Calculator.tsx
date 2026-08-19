@@ -1,4 +1,4 @@
-import { useMemo } from 'preact/hooks';
+import { useEffect, useMemo, useRef } from 'preact/hooks';
 import { buildCalcResult, type CalcResult } from '../../lib/calc/result';
 import { calcToMarkdown } from '../../lib/export/markdown';
 import { copyText } from '../../lib/export/download';
@@ -146,8 +146,19 @@ interface PrefixStepperProps {
 function PrefixStepper({ result, onChange }: PrefixStepperProps) {
   const max = bitsOf(result.family);
   const address = formatAddress(result.cidr);
+
+  // `result` trails the input by the debounce, so two quick clicks would both compute from
+  // the same stale prefix and the second would be swallowed. The pending prefix is the one
+  // the user has actually asked for; it re-syncs whenever a fresh result lands.
+  const pending = useRef(result.prefix);
+  useEffect(() => {
+    pending.current = result.prefix;
+  }, [result.prefix, address]);
+
   const set = (prefix: number) => {
-    onChange(`${address}/${Math.min(Math.max(prefix, 0), max)}`);
+    const clamped = Math.min(Math.max(prefix, 0), max);
+    pending.current = clamped;
+    onChange(`${address}/${clamped}`);
   };
 
   return (
@@ -160,7 +171,7 @@ function PrefixStepper({ result, onChange }: PrefixStepperProps) {
         class="nc-stepper__button"
         aria-label={strings.calc.widen}
         disabled={result.prefix === 0}
-        onClick={() => set(result.prefix - 1)}
+        onClick={() => set(pending.current - 1)}
       >
         −
       </button>
@@ -178,7 +189,7 @@ function PrefixStepper({ result, onChange }: PrefixStepperProps) {
         class="nc-stepper__button"
         aria-label={strings.calc.narrow}
         disabled={result.prefix === max}
-        onClick={() => set(result.prefix + 1)}
+        onClick={() => set(pending.current + 1)}
       >
         +
       </button>
