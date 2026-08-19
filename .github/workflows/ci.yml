@@ -29,3 +29,19 @@ jobs:
 
       - name: Production build
         run: npm run build
+
+      # The end-to-end suite drives the built extension in a real Chrome. Extensions only
+      # load in a headed browser, so the run is wrapped in a virtual display.
+      - name: Install Chrome for Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end suite
+        run: xvfb-run -a npx playwright test
+
+      - name: Upload the Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

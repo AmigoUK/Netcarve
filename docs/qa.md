@@ -1,8 +1,11 @@
 # NetCarve — manual QA checklist
 
 Run this before every release that touches the UI, and in full before a Chrome Web Store
-submission. Automated coverage lives in `tests/`; this list covers what a test runner cannot
-see. Tick the boxes in a scratch copy, not in the repository.
+submission. Automated coverage lives in `tests/`: `tests/lib` and `tests/ui` under Vitest, and
+`tests/e2e` driving the packed extension in a real Chrome (`npm run test:e2e`), which already
+asserts the manifest, every view, the context-menu contract, exports, storage, accessibility,
+the performance claims and the absence of network calls. This list covers what a test runner
+cannot see — how it feels, how it reads, and how it behaves in a real profile. Tick the boxes in a scratch copy, not in the repository.
 
 Build under test: `npm run build` → load `.output/chrome-mv3` via `chrome://extensions` →
 *Load unpacked*.
