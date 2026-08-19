@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.10.0] — 2026-08-19
+
+### Added
+- `src/lib/vlsm/solver.ts`: the VLSM solver (F4), reproducing FR-VLSM-03 exactly — requirements
+  sorted by block size descending and stable by input order, a free list seeded with the base
+  network, and each requirement taking the lowest-addressed free block that fits, split
+  minimally until a block of the right size falls out.
+- Sizing per FR-VLSM-02 (`hosts + 2`, rounded up to a power of two), with the "allow /31 for
+  two-host links" option sizing one- and two-host requirements as a /31.
+- Shortfall reporting (FR-VLSM-05): the requirement that failed is named with how many more
+  addresses would have been needed, and everything allocated before it is still returned.
+- Leftover blocks are merged back into the largest whole blocks, so the free list reads as
+  what is actually available rather than the fragments splitting happened to leave.
+
+### Fixed
+- `formatPercent` rounds to nearest instead of truncating, so the §7 vector reports 93.8 %
+  utilisation rather than 93.7 %.
+
+### Tests
+- 33 cases, including the canonical §7 acceptance vector down to each block, usable count and
+  waste figure; independence from input ordering; tie-breaks; the exact-fit and empty cases;
+  the /31 toggle end to end; three shortfall paths; and every input-validation refusal.
+
 ## [0.9.0] — 2026-08-19
 
 ### Added
@@ -294,7 +317,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.10.0
 [0.9.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.9.0
 [0.8.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.8.0
 [0.7.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.7.0

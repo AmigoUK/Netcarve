@@ -74,7 +74,8 @@ export function formatCount(value: bigint): CountDisplay {
 /** A percentage rounded to one decimal place, without a trailing `.0`. */
 export function formatPercent(part: bigint, whole: bigint): string {
   if (whole === 0n) return '0';
-  const tenths = (part * 1000n) / whole;
+  // Round to nearest rather than truncating, so 240/256 reads as 93.8 % and not 93.7 %.
+  const tenths = (part * 1000n + whole / 2n) / whole;
   const value = Number(tenths) / 10;
   return Number.isInteger(value) ? String(value) : value.toFixed(1);
 }
