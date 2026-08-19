@@ -49,6 +49,7 @@ test.describe('resilience', () => {
       await chrome.storage.local.set({ 'netcarve:settings': { theme: 'chartreuse', nonsense: 1 } });
     });
     await app.reload();
+    await app.waitForSelector('.nc-shell');
     await goToRoute(app, '/settings');
 
     await expect(app.getByRole('radio', { name: 'Match the system' })).toBeChecked();

@@ -78,8 +78,12 @@ export async function resetStorage(page: Page): Promise<void> {
 
 /** Navigates the hash router and waits for the shell to settle on the new route. */
 export async function goToRoute(page: Page, route: string): Promise<void> {
+  await page.waitForSelector('.nc-shell');
   await page.evaluate((target) => {
     globalThis.location.hash = target;
+    // The shell subscribes to `hashchange` from an effect. A hash set in the gap between the
+    // first render and that subscription would be missed, so nudge it once more.
+    globalThis.setTimeout(() => globalThis.dispatchEvent(new HashChangeEvent('hashchange')), 0);
   }, route);
   await page.waitForTimeout(150);
 }
