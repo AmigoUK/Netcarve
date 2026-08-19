@@ -79,8 +79,9 @@ duplicates and containment chains immediately. Comments and blank lines are igno
 are named rather than silently dropped. IPv4 and IPv6 are compared separately.
 
 **Export that fits your documentation**
-Markdown, CSV and JSON. The Markdown table drops straight into a client report; the JSON is a
-complete backup you can import again later.
+Markdown, plain text, CSV and JSON. The Markdown table drops straight into a client report,
+plain text goes into a ticket or a terminal, and the JSON is a complete backup you can import
+again later.
 
 **Private by design**
 NetCarve asks for two permissions: storage, and context menus. It has no site access, makes no

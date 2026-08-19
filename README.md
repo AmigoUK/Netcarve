@@ -22,7 +22,7 @@ running entirely on your own machine.
 | **VLSM solver** — turn host-count requirements into an optimal allocation | `#/vlsm` |
 | **Conflict checker** — paste a list of CIDRs, find duplicates and containment | `#/conflicts` |
 | **Context menu** — select an IP or CIDR on any page and analyse it | Right-click → *Analyse "…" in NetCarve* |
-| **Export** — Markdown, CSV and JSON, ready for client documentation | Everywhere |
+| **Export** — Markdown, plain text, CSV and JSON, ready for client documentation | Everywhere |
 
 ## Privacy
 
