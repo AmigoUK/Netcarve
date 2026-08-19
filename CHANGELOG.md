@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.2.0] — 2026-08-19
+
+### Added
+- `src/styles/tokens.css`: the full design-token system. NetCarve's visual language is a
+  drafting sheet rather than a dashboard — cool paper, petrol ink, hairline rules and
+  wide-tracked uppercase micro-labels, with the **bit ruler** (a strip of cells with a hard
+  rule at the prefix boundary) as the signature element carried across every view. Dark mode
+  follows `prefers-color-scheme` and is overridden by `data-theme` from Settings.
+- The eight planner palette tokens, each defined as a tint, a text colour that keeps at least
+  4.5:1 against it, and a solid dot for the tree gutter — in both themes (§9.4, NFR-A11Y-01).
+- `src/strings.ts`: every user-facing string in British English, plus `errorMessage` and
+  `warningMessage` mapping parser codes to friendly copy (NFR-I18N-01).
+- `src/lib/storage/store.ts`: typed `chrome.storage.local` wrapper with a 500 ms debounced
+  writer, an in-memory fallback when `chrome` is absent, and quota failures reported through
+  a callback instead of thrown (FR-STOR-01/02).
+- `src/lib/storage/settings.ts`: `Settings` defaults, normalisation of anything unrecognised
+  in storage, and load/save.
+
+### Tests
+- 18 cases: the memory and `chrome.storage.local` areas, read/write/remove failure paths,
+  debounce coalescing under fake timers, flush semantics, quota-failure reporting, and
+  settings normalisation of null, junk and out-of-range values.
+
 ## [0.1.0] — 2026-08-19
 
 ### Added
@@ -108,7 +131,8 @@ _Nothing yet._
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.2.0
 [0.1.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.1.0
 [0.0.6]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.6
 [0.0.5]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.0.5
