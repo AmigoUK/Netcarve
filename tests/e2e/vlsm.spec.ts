@@ -42,6 +42,18 @@ test.describe('the VLSM solver (F4)', () => {
     await expect(app.locator('.nc-hint').last()).toBeVisible();
   });
 
+  test('keeps a requirement name beside its host count', async ({ app }) => {
+    await app.getByLabel('Base network').fill('192.168.10.0/24');
+    await requirement(app, 1, 'Warehouse', 120);
+
+    const name = await app.getByLabel('Name 1').boundingBox();
+    const hosts = await app.getByLabel('Hosts 1').boundingBox();
+    const gap = hosts!.x - (name!.x + name!.width);
+
+    expect(gap).toBeGreaterThanOrEqual(0);
+    expect(gap).toBeLessThan(40);
+  });
+
   test('reports how far short the base network falls', async ({ app }) => {
     await app.getByLabel('Base network').fill('192.168.10.0/28');
     await requirement(app, 1, 'Too big', 200);

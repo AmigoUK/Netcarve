@@ -98,8 +98,12 @@
   padding: var(--space-5);
 }
 
+/* A horizontal group. The direction is stated rather than inherited: `.nc-section` also
+   sets `flex-direction`, and an element carrying both used to come out as a 256 px-tall
+   column because `.nc-row` never overrode it. */
 .nc-row {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: var(--space-2);
   flex-wrap: wrap;
@@ -515,10 +519,18 @@
   list-style: none;
 }
 
+/* One requirement: a name, a host count and the row controls, kept together. Without the
+   width cap the name field stretched the full panel while its input stayed at its 12 rem
+   maximum, leaving half a screen of gap between a requirement and its own host count. */
 .nc-requirement {
   display: flex;
   align-items: flex-end;
   gap: var(--space-2);
+  max-width: 34rem;
+}
+
+.nc-requirement .nc-input--small {
+  max-width: none;
 }
 
 .nc-input--hosts {

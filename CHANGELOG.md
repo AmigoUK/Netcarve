@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.0.2] — 2026-08-19
+
+### Fixed
+- The planner's "add a root block" form rendered as a 350 px-tall column with the input and
+  the button stranded at opposite ends. `.nc-row` never stated its own `flex-direction`, so on
+  the one element that also carries `.nc-section` the column direction won and
+  `.nc-field--grow`'s 16 rem basis became a height. `.nc-row` is now explicitly a row.
+- A VLSM requirement's name sat half a screen from its own host count: the field grew to fill
+  the panel while the input inside stayed at its 12 rem cap. Requirement rows are now capped at
+  34 rem and the name input fills its field.
+
+### Added
+- `npm run screenshots` — a Playwright job that seeds a realistic plan and writes the five
+  1280 × 800 Chrome Web Store screenshots into `docs/store/screenshots/`, so the listing images
+  are regenerated from the real build rather than retouched by hand.
+- Layout regression tests for both fixes above, so neither can come back unnoticed.
+
 ## [1.0.1] — 2026-08-19
 
 ### Added
@@ -435,7 +452,8 @@ implemented, tested and building.
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.2
 [1.0.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.1
 [1.0.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.0
 [0.13.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v0.13.0

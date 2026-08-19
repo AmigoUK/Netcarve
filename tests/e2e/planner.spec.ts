@@ -36,6 +36,24 @@ test.describe('projects and the planner (F2, F3)', () => {
     await expect(card).toContainText('0 root blocks');
   });
 
+  test('lays the add-a-root form out as one row', async ({ app }) => {
+    await newProject(app, 'Layout');
+    const form = app.locator('form.nc-row');
+    const field = form.locator('.nc-field--grow');
+    const button = form.getByRole('button', { name: 'Add block' });
+
+    const [formBox, fieldBox, buttonBox] = await Promise.all([
+      form.boundingBox(),
+      field.boundingBox(),
+      button.boundingBox(),
+    ]);
+
+    // The input and the button sit side by side, not stacked, and the panel stays compact.
+    expect(buttonBox!.x).toBeGreaterThan(fieldBox!.x + fieldBox!.width - 1);
+    expect(fieldBox!.height).toBeLessThan(90);
+    expect(formBox!.height).toBeLessThan(140);
+  });
+
   test('refuses a root block that overlaps one already in the plan', async ({ app }) => {
     await newProject(app, 'Overlap check');
     await addRoot(app, '10.20.0.0/16');
