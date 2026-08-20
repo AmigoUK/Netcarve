@@ -7,7 +7,7 @@ import {
   parseCidr,
   type Cidr,
 } from '@/src/lib/ip/cidr';
-import { isParseError } from '@/src/lib/ip/errors';
+import { isParseError } from '@/src/lib/errors';
 
 function value(input: string): Cidr {
   const result = parseCidr(input);

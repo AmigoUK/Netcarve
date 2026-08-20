@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isParseError } from '@/src/lib/ip/errors';
+import { isParseError } from '@/src/lib/errors';
 import { formatIPv4, maskV4, parseIPv4, parseV4Mask, wildcardV4 } from '@/src/lib/ip/v4';
 
 /** Unwrap a parse expected to succeed. */

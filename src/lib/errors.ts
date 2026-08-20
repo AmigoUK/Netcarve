@@ -1,7 +1,7 @@
 /**
- * Parse results for the IP domain library.
+ * Parse results for every domain module — IP addresses, and the numeric tools.
  *
- * Nothing in `src/lib/ip` ever throws: every parser returns a discriminated union so a
+ * Nothing in `src/lib` ever throws: every parser returns a discriminated union so a
  * malformed input can never take down a view (see DECISIONS.md D6). Successful parses can
  * still carry `warnings` — a stripped zone ID or an assumed host prefix is information,
  * not a failure (D7).
@@ -20,7 +20,13 @@ export type ParseErrorCode =
   | 'NONCONTIGUOUS_MASK'
   | 'MASK_NOT_SUPPORTED'
   | 'AT_MAX_PREFIX'
-  | 'FAMILY_MISMATCH';
+  | 'FAMILY_MISMATCH'
+  // The numeric tools (`src/lib/numeric`).
+  | 'BAD_DIGITS'
+  | 'MISSING_RADIX_PREFIX'
+  | 'DOES_NOT_FIT'
+  | 'NEGATIVE_RESULT'
+  | 'WIDTH_MISMATCH';
 
 /** Machine-readable note attached to a *successful* parse. */
 export type WarningCode = 'ZONE_ID_STRIPPED' | 'ASSUMED_HOST_PREFIX' | 'HOST_BITS_SET';

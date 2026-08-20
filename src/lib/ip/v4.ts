@@ -6,7 +6,7 @@
  * negative values JavaScript's signed bitwise operators would otherwise produce.
  */
 
-import { fail, ok, type ParseResult } from './errors';
+import { fail, ok, type ParseResult } from '../errors';
 
 export const V4_BITS = 32;
 export const V4_MAX = 0xffffffff;

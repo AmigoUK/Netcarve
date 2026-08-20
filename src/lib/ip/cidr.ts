@@ -6,7 +6,7 @@
  * one given in the specification §4.1.
  */
 
-import { fail, ok, type ParseResult, type Warning, warn } from './errors';
+import { fail, ok, type ParseResult, type Warning, warn } from '../errors';
 import { formatIPv4, parseIPv4, parseV4Mask } from './v4';
 import { formatIPv6, maskV6, parseIPv6 } from './v6';
 

@@ -16,7 +16,7 @@ import {
   type Cidr6,
   type IpFamily,
 } from './cidr';
-import { fail, ok, type ParseResult } from './errors';
+import { fail, ok, type ParseResult } from '../errors';
 import { maskV4, V4_MAX } from './v4';
 import { maskV6 } from './v6';
 

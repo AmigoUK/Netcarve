@@ -6,7 +6,7 @@
  * no refactoring of the views required (spec §13).
  */
 
-import type { ParseErrorCode, WarningCode } from './lib/ip/errors';
+import type { ParseErrorCode, WarningCode } from './lib/errors';
 
 export const strings = {
   app: {
@@ -295,6 +295,12 @@ const PARSE_ERROR_COPY: Record<ParseErrorCode, string> = {
   MASK_NOT_SUPPORTED: 'IPv6 uses prefix lengths rather than dotted masks — try /64.',
   AT_MAX_PREFIX: 'This block is a single address — there is nothing left to split.',
   FAMILY_MISMATCH: 'Those two blocks belong to different address families.',
+  BAD_DIGITS: 'That is not a number NetCarve can read.',
+  MISSING_RADIX_PREFIX:
+    'Prefix hexadecimal with 0x and binary with 0b — 123 is both a decimal and a hexadecimal number.',
+  DOES_NOT_FIT: 'That value does not fit in the chosen width.',
+  NEGATIVE_RESULT: 'The result is below zero.',
+  WIDTH_MISMATCH: 'Both values must have the same width.',
 };
 
 const WARNING_COPY: Record<WarningCode, string> = {

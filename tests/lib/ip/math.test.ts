@@ -6,7 +6,7 @@ import {
   type Cidr,
   type Cidr4,
 } from '@/src/lib/ip/cidr';
-import { isParseError } from '@/src/lib/ip/errors';
+import { isParseError } from '@/src/lib/errors';
 import {
   broadcastOf,
   compareCidr,

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parseCidr, type Cidr } from '@/src/lib/ip/cidr';
-import { isParseError } from '@/src/lib/ip/errors';
+import { isParseError } from '@/src/lib/errors';
 import { IPV4_SPECIAL, IPV6_SPECIAL, lookupSpecial } from '@/src/lib/ip/special';
 
 function block(input: string): Cidr {

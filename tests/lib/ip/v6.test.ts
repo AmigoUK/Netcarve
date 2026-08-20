@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isParseError } from '@/src/lib/ip/errors';
+import { isParseError } from '@/src/lib/errors';
 import { MAX128, expandIPv6, formatIPv6, maskV6, parseIPv6 } from '@/src/lib/ip/v6';
 
 function value(input: string): bigint {

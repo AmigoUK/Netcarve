@@ -15,7 +15,7 @@ import {
   type Cidr,
   type IpFamily,
 } from '../ip/cidr';
-import type { ParseErrorCode, Warning } from '../ip/errors';
+import type { ParseErrorCode, Warning } from '../errors';
 import {
   lastAddressOf,
   networkAddressOf,

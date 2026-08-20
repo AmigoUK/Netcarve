@@ -6,7 +6,7 @@
  * follows RFC 5952 §4 to the letter.
  */
 
-import { fail, ok, type ParseError, type ParseResult, type Warning, warn } from './errors';
+import { fail, ok, type ParseError, type ParseResult, type Warning, warn } from '../errors';
 import { parseIPv4 } from './v4';
 
 export const V6_BITS = 128;
