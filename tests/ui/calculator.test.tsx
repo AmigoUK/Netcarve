@@ -162,3 +162,17 @@ describe('Popup', () => {
     vi.unstubAllGlobals();
   });
 });
+
+describe('the converter link', () => {
+  it('is offered in the full app', async () => {
+    render(<Harness initial="10.0.0.0/8" />);
+    expect(await screen.findByRole('link', { name: /Open in converter/ })).toBeInTheDocument();
+  });
+
+  it('is left out of the popup, where it would crowd the headline', async () => {
+    render(<Popup version="9.9.9" />);
+    typeInto('10.0.0.0/8');
+    await waitFor(() => expect(headline('10.0.0.0')).toBeInTheDocument());
+    expect(screen.queryByRole('link', { name: /Open in converter/ })).not.toBeInTheDocument();
+  });
+});

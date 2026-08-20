@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.2.1] — 2026-08-20
+
+### Changed
+- **The Chrome Web Store screenshot set is rebuilt from the full-page app.** The dashboard takes
+  at most five, so the five now show five different jobs — calculator, planner, VLSM solver,
+  tools, conflict checker — rather than five views of one, and the new tools page is
+  represented. The last is captured in the dark theme, so both themes appear without spending a
+  slot on a second view of the same screen.
+- Each store screenshot carries a 56 px caption band naming what the reader is looking at. The
+  app is 1280 px wide, exactly the screenshot width, so insetting it would shrink the interface;
+  the band sits above a 1280 × 744 capture and keeps every pixel of the UI at 1:1.
+
+### Added
+- `docs/store/gallery/` — six further captures the listing has no room for: the popup at its
+  real 400 × 600 size, the calculator on IPv6, the projects list, the planner and the tools page
+  in the dark theme, and settings. The README now shows them.
+- Every asset is produced by `npm run screenshots`, headless, against the real build.
+
+### Fixed
+- The popup no longer offers *Open in converter*. At 400 px the link wrapped across three lines
+  and crowded the headline, and the converter is a full-app page in any case — the popup already
+  offers *Open the full app*. Caught by the first capture of the popup at its real size, and now
+  covered by a test either way.
+
 ## [1.2.0] — 2026-08-20
 
 ### Added
@@ -546,7 +570,8 @@ implemented, tested and building.
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.1
 [1.2.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.0
 [1.1.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.2
 [1.1.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.1
