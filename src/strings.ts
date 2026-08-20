@@ -22,6 +22,7 @@ export const strings = {
     planner: 'Planner',
     vlsm: 'VLSM solver',
     conflicts: 'Conflicts',
+    tools: 'Tools',
     settings: 'Settings',
   },
 
@@ -88,6 +89,45 @@ export const strings = {
     },
     specialTitle: 'Reserved ranges',
     deprecated: 'deprecated',
+  },
+
+  tools: {
+    title: 'Tools',
+    subtitle: 'Bases, bits and masks — the arithmetic that comes up between the bigger jobs.',
+    index: {
+      converter: 'Base converter',
+      bitwise: 'Bitwise',
+      masks: 'Masks & prefixes',
+    },
+    jumpTo: 'Jump to',
+
+    converterTitle: 'Base converter',
+    valueLabel: 'Value',
+    valuePlaceholder: '192.168.1.1, 0xC0A80101, 0b11000000 or 3232235777',
+    widthLabel: 'Width',
+    widthOption: (bits: number) => `${bits} bits`,
+    widthTooSmall: (bits: number) => `${bits} bits cannot hold this value`,
+    readAs: (form: string) => `read as ${form}`,
+    forms: {
+      decimal: 'a decimal number',
+      hex: 'a hexadecimal number',
+      binary: 'a binary number',
+      'dotted-quad': 'a dotted quad',
+      ipv6: 'an IPv6 address',
+    },
+    rows: {
+      decimal: 'Decimal',
+      hex: 'Hexadecimal',
+      binary: 'Binary',
+      ipv4: 'IPv4 address',
+      ipv6: 'IPv6 address',
+    },
+    bitsLabel: 'Bits',
+    bitHint: 'Click a bit to flip it.',
+    bitLabel: (position: number, bit: string) => `Bit ${position}, value ${bit}`,
+    setBits: (count: number, width: number) => `${count} of ${width} bits set`,
+    empty: 'Type a value to see it in every base.',
+    openInConverter: 'Open in converter',
   },
 
   projects: {

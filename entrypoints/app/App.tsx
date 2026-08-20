@@ -11,7 +11,13 @@ import { AppFooter } from '@/src/ui/components/AppFooter';
 import { ExportBar } from '@/src/ui/components/ExportBar';
 import { ImportButton } from '@/src/ui/components/ImportButton';
 import { Toast, type ToastMessage } from '@/src/ui/components/Toast';
-import { consumeQueryParam, navigate, useRoute, type RouteName } from '@/src/ui/router';
+import {
+  consumeQueryParam,
+  consumeQueryParams,
+  navigate,
+  useRoute,
+  type RouteName,
+} from '@/src/ui/router';
 import { useProjects } from '@/src/ui/useProjects';
 import { useSettings } from '@/src/ui/theme';
 import { Calculator } from '@/src/ui/views/Calculator';
@@ -20,6 +26,8 @@ import { Projects } from '@/src/ui/views/Projects';
 import { SettingsView } from '@/src/ui/views/Settings';
 import { Vlsm } from '@/src/ui/views/Vlsm';
 import { Conflicts } from '@/src/ui/views/Conflicts';
+import { Tools } from '@/src/ui/views/Tools';
+import { BIT_WIDTHS, type BitWidth } from '@/src/lib/numeric/value';
 import { solutionToRoot } from '@/src/lib/vlsm/toPlan';
 import { createProject } from '@/src/lib/plan/model';
 import { formatCidr } from '@/src/lib/ip/cidr';
@@ -34,6 +42,7 @@ const NAV: ReadonlyArray<{ name: RouteName; path: string; label: string }> = [
   { name: 'projects', path: '/projects', label: strings.nav.projects },
   { name: 'vlsm', path: '/vlsm', label: strings.nav.vlsm },
   { name: 'conflicts', path: '/conflicts', label: strings.nav.conflicts },
+  { name: 'tools', path: '/tools', label: strings.nav.tools },
   { name: 'settings', path: '/settings', label: strings.nav.settings },
 ];
 
@@ -42,6 +51,8 @@ export function App({ version }: AppProps) {
   const settings = useSettings();
   const projects = useProjects();
   const [calcInput, setCalcInput] = useState('');
+  const [toolsValue, setToolsValue] = useState('');
+  const [toolsWidth, setToolsWidth] = useState<BitWidth | undefined>();
   const [toast, setToast] = useState<ToastMessage | undefined>();
 
   // FR-CTX-02/04: the context menu hands the selection over as ?q, which is read once and
@@ -50,6 +61,16 @@ export function App({ version }: AppProps) {
     if (route.name !== 'calc') return;
     const query = consumeQueryParam(route, 'q');
     if (query !== undefined && query !== '') setCalcInput(query);
+  }, [route]);
+
+  // `#/tools?v=…&w=…` seeds the converter once, the same one-shot pattern as `?q=`
+  // (FR-TOOL-07). Both keys are consumed together, or the second read would put the first back.
+  useEffect(() => {
+    if (route.name !== 'tools') return;
+    const taken = consumeQueryParams(route, ['v', 'w']);
+    if (taken.v !== undefined && taken.v !== '') setToolsValue(taken.v);
+    const width = Number(taken.w);
+    if ((BIT_WIDTHS as readonly number[]).includes(width)) setToolsWidth(width as BitWidth);
   }, [route]);
 
   // A root that could not be validated is quarantined on load; say so rather than letting
@@ -211,6 +232,10 @@ export function App({ version }: AppProps) {
             exportFooter={settings.settings.exportFooter}
             copyFormat={settings.settings.defaultCopyFormat}
           />
+        )}
+
+        {route.name === 'tools' && (
+          <Tools key={`${toolsValue}|${toolsWidth ?? ''}`} initialValue={toolsValue} initialWidth={toolsWidth} />
         )}
 
         {route.name === 'calc' && (

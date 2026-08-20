@@ -7,7 +7,14 @@
 
 import { useEffect, useState } from 'preact/hooks';
 
-export type RouteName = 'calc' | 'projects' | 'planner' | 'vlsm' | 'conflicts' | 'settings';
+export type RouteName =
+  | 'calc'
+  | 'projects'
+  | 'planner'
+  | 'vlsm'
+  | 'conflicts'
+  | 'tools'
+  | 'settings';
 
 export interface Route {
   readonly name: RouteName;
@@ -24,6 +31,7 @@ const ROUTE_NAMES: readonly RouteName[] = [
   'planner',
   'vlsm',
   'conflicts',
+  'tools',
   'settings',
 ];
 
@@ -55,19 +63,38 @@ export function navigate(path: string): void {
 }
 
 /**
- * Reads a query parameter once and rewrites the URL without it, so a refresh does not
- * re-trigger the action (FR-CTX-04).
+ * Reads several query parameters at once and rewrites the URL without them, so a refresh does
+ * not re-trigger the action (FR-CTX-04).
+ *
+ * Taking them together matters: consuming one at a time would rebuild the URL from the
+ * original query each time and put the earlier parameter back.
  */
-export function consumeQueryParam(route: Route, key: string): string | undefined {
-  const value = route.query.get(key);
-  if (value === null) return undefined;
-
+export function consumeQueryParams(
+  route: Route,
+  keys: readonly string[],
+): Record<string, string | undefined> {
+  const taken: Record<string, string | undefined> = {};
   const remaining = new URLSearchParams(route.query);
-  remaining.delete(key);
-  const suffix = remaining.toString();
-  const cleaned = `#${route.path}${suffix === '' ? '' : `?${suffix}`}`;
-  globalThis.history?.replaceState?.(null, '', cleaned);
-  return value;
+  let found = false;
+
+  for (const key of keys) {
+    const value = route.query.get(key);
+    if (value === null) continue;
+    taken[key] = value;
+    remaining.delete(key);
+    found = true;
+  }
+
+  if (found) {
+    const suffix = remaining.toString();
+    globalThis.history?.replaceState?.(null, '', `#${route.path}${suffix === '' ? '' : `?${suffix}`}`);
+  }
+  return taken;
+}
+
+/** The single-parameter case, which is what the context menu needs. */
+export function consumeQueryParam(route: Route, key: string): string | undefined {
+  return consumeQueryParams(route, [key])[key];
 }
 
 /** The current route, kept in step with the address bar. */

@@ -607,3 +607,84 @@
   color: var(--success);
   font-weight: 600;
 }
+
+/* Tools --------------------------------------------------------------------- */
+
+.nc-tools__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.nc-tools__index {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+/* Bit field — the calculator's ruler, but every cell is an input. */
+.nc-bits {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nc-bits__cell {
+  display: block;
+  min-width: 1.5rem;
+  padding: var(--space-1) 0;
+  border: 1px solid var(--rule);
+  border-inline-start-width: 0;
+  background: var(--bit-host);
+  color: var(--bit-host-ink);
+  font-size: var(--text-xs);
+  text-align: center;
+  cursor: pointer;
+}
+
+.nc-bits li:first-child .nc-bits__cell {
+  border-inline-start-width: 1px;
+  border-start-start-radius: var(--radius-sm);
+  border-end-start-radius: var(--radius-sm);
+}
+
+.nc-bits li:last-child .nc-bits__cell {
+  border-start-end-radius: var(--radius-sm);
+  border-end-end-radius: var(--radius-sm);
+}
+
+.nc-bits__cell.is-set {
+  background: var(--bit-network);
+  color: var(--bit-network-ink);
+  font-weight: 600;
+}
+
+.nc-bits__cell.is-group-start {
+  margin-inline-start: var(--space-2);
+  border-inline-start-width: 1px;
+}
+
+button.nc-bits__cell:hover {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+span.nc-bits__cell {
+  cursor: default;
+}
+
+.nc-bitfield__legend {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-xs);
+  color: var(--ink-faint);
+}
+
+@media (max-width: 46rem) {
+  .nc-bits__cell {
+    min-width: 1.1rem;
+  }
+}
