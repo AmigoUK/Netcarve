@@ -120,6 +120,15 @@ capture and keeps every pixel of the UI at 1:1.
 | Small promo tile | `docs/store/promo-small-440x280.png` | 440 × 280 |
 | Marquee promo tile | `docs/store/promo-marquee-1400x560.png` | 1400 × 560 |
 
+The repository's own presentation is set separately and is **not** part of the store listing:
+
+| Where | Value |
+|---|---|
+| GitHub About → description | Plan address space, not just calculate it. A Chrome extension for IPv4/IPv6 subnetting, visual subnet planning, VLSM and conflict checking — entirely on-device. |
+| GitHub About → website | `https://www.attv.uk` |
+| GitHub About → topics | chrome-extension · manifest-v3 · subnet-calculator · subnetting · ipv4 · ipv6 · cidr · vlsm · ipam · networking · network-engineering · typescript · preact · wxt · privacy-first · local-first · developer-tools |
+| GitHub social preview | `docs/store/github-social-preview-1280x640.png` — **upload by hand** at Settings → General → Social preview; GitHub exposes no API for it |
+
 The caption baked into each one, in order:
 
 1. **Quick calculator** — IPv4 and IPv6 — masks, ranges and reserved-range notes as you type

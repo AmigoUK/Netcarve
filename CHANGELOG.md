@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.2.3] — 2026-08-20
+
+### Added
+- `docs/store/github-social-preview-1280x640.png` — the card GitHub shows whenever the
+  repository link is pasted into a chat or a post, drawn from the same palette and block motif
+  as the promotional tiles. It has to be uploaded by hand at Settings → General → Social
+  preview; GitHub exposes no API for it.
+- `docs/store-listing.md` now records the repository's own presentation — description, website
+  and topics — separately from the store listing, so the two are not confused again.
+
+### Changed
+- The GitHub repository's About panel is filled in: a one-line description, `www.attv.uk` as the
+  website, and seventeen topics covering what it is (chrome-extension, subnet-calculator, vlsm,
+  ipam), what it speaks (ipv4, ipv6, cidr) and what it is built from (typescript, preact, wxt).
+  It read "No description, website, or topics provided" until now.
+
 ## [1.2.2] — 2026-08-20
 
 ### Added
@@ -600,7 +616,8 @@ implemented, tested and building.
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.2.3...HEAD
+[1.2.3]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.3
 [1.2.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.2
 [1.2.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.1
 [1.2.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.0

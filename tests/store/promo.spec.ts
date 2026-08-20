@@ -140,4 +140,40 @@ test.describe('Chrome Web Store promotional tiles', () => {
     await tile.screenshot({ path: `${OUT}promo-marquee-1400x560.png` });
     await tile.close();
   });
+
+  /**
+   * GitHub's social preview — the card shown whenever the repository link is pasted into
+   * Slack, a chat or a post. It is set through Settings → General → Social preview; there is
+   * no API for it, so this only produces the file.
+   *
+   * GitHub crops the card on some surfaces, so nothing important sits near the edges.
+   */
+  test('GitHub social preview — 1280 × 640', async () => {
+    const card = await browser.newPage({ viewport: { width: 1280, height: 640 } });
+    await card.setContent(
+      page(`<div style="display:grid;grid-template-columns:1fr auto;gap:64px;align-items:center;padding:0 88px;width:100%">
+        <div style="display:grid;gap:22px">
+          <div style="display:flex;align-items:center;gap:16px">
+            <img src="data:image/png;base64,${ICON}" width="56" height="56" alt="">
+            <div class="name" style="font-size:40px">NetCarve</div>
+          </div>
+          <div class="name" style="font-size:46px;line-height:1.1">
+            Plan address space,<br>not just calculate it.
+          </div>
+          <div class="rule" style="width:84px"></div>
+          <div class="tag" style="font-size:19px;max-width:36ch">
+            A Chrome extension for IPv4/IPv6 subnetting, visual subnet planning, VLSM and
+            conflict checking — entirely on-device.
+          </div>
+          <div class="tag" style="font-size:15px;letter-spacing:.06em;text-transform:uppercase">
+            github.com/AmigoUK/Netcarve · MIT
+          </div>
+        </div>
+        ${motif(1.3)}
+      </div>`),
+    );
+    await card.evaluate(() => document.fonts.ready);
+    await card.screenshot({ path: `${OUT}github-social-preview-1280x640.png` });
+    await card.close();
+  });
 });

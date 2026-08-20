@@ -1,6 +1,6 @@
 {
   "name": "netcarve",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "IP subnet calculator, visual address planner and VLSM solver — entirely on-device.",
   "private": true,
   "type": "module",
