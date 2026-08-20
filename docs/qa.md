@@ -75,6 +75,25 @@ Build under test: `npm run build` → load `.output/chrome-mv3` via `chrome://ex
 - [ ] Edit the exported file's `schemaVersion` to `2` and import: refused with a clear message.
 - [ ] Settings → *Export all data* writes every project into one file.
 
+## 6a. Tools (F9)
+
+- [ ] `#/tools` → type `192.168.1.1`: decimal `3232235777`, hex `0xC0A80101`, binary in four
+      octets, and the IPv4 row all agree.
+- [ ] The 8- and 16-bit widths are disabled and say why on hover; 32 is selected.
+- [ ] Type `0xFF`, switch to 8 bits, then type `192.168.1.1`: the panel moves to 32 bits rather
+      than showing an error you cannot clear.
+- [ ] Click a bit: every base updates and the set-bit count follows.
+- [ ] Type `C0A8`: the message explains that hexadecimal needs `0x`, rather than reading it as
+      decimal.
+- [ ] Bitwise: `10.20.30.40` AND `255.255.0.0` gives `10.20.0.0`. NOT on `255.255.255.0` gives
+      `0.0.0.255` and hides the second operand.
+- [ ] Masks: prefix 26 gives `255.255.255.192` and wildcard `0.0.0.63`; typing
+      `255.255.240.0` gives back 20; `255.0.255.0` is refused as non-contiguous.
+- [ ] Copy as Markdown pastes a Base/Value table.
+- [ ] From the calculator, *Open in converter* carries the network address across.
+- [ ] Keyboard only: the width radios, the value field, every bit and the export button are all
+      reachable, with visible focus.
+
 ## 7. Solver and conflicts (F4, F5)
 
 - [ ] VLSM: base `192.168.10.0/24`, requirements Warehouse 120, Office 50, VoIP 20,

@@ -373,7 +373,7 @@ function Masks() {
 
       {outcome.ok && (
         <>
-          <dl class="nc-values">
+          <dl class="nc-values nc-values--single">
             <div class="nc-values__row">
               <dt class="nc-label">{strings.tools.wildcardLabel}</dt>
               <dd>

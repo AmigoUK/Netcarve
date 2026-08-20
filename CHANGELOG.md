@@ -9,6 +9,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.2.0] — 2026-08-20
+
+### Added
+- A **Tools** page at `#/tools`, holding three sections (FR-TOOL-01 … FR-TOOL-08; design in
+  `docs/superpowers/specs/2026-08-20-tools-converter-design.md`):
+  - **Base converter** — one value shown at once in decimal, hexadecimal, binary and, where the
+    width has one, its address form. The width is an explicit control from 8 to 128 bits, not a
+    guess: `NOT 0xFF` is `0x00` at eight bits and `0xFFFFFF00` at thirty-two, so inferring it
+    from the digit count would answer a question nobody asked. Widths too small for the current
+    value are disabled rather than truncating.
+  - **Bitwise** — AND, OR, XOR, AND NOT, NOT and both shifts on real addresses, with the result
+    in every base. Operand A settles the width and B is read at it, so a result never mixes
+    widths.
+  - **Masks & prefixes** — prefix and dotted mask driving each other, with the wildcard and the
+    set-bit count. IPv4 only, and it says so: a dotted mask is an IPv4 spelling.
+- The **bit display is an input**: every bit is a button, clicking flips it, and each is named
+  the way engineers name bits — the leftmost of thirty-two is bit 31.
+- `src/lib/numeric/`, a new pure module for numbers of known width — parsing across bases,
+  formatting, bitwise operations and width-generic masks. Held to 100 % branch coverage
+  alongside `src/lib/ip` (FR-TOOL-08).
+- Copy as Markdown or plain text from the converter, honouring the default-copy-format setting,
+  and an *Open in converter* link on the calculator result that carries the network address over.
+
+### Changed
+- A bare `C0A8` is refused with an explanation rather than read as decimal or hex — `123` is
+  both, and guessing there is the silent mistake the whole design avoids (FR-TOOL-04).
+- The shared parse-error vocabulary moved from `src/lib/ip/errors.ts` to `src/lib/errors.ts`,
+  since it now serves two domains.
+
+### Tests
+- 715 unit and component tests, 113 end-to-end. New: 100 cases across the numeric core —
+  including a seeded round-trip of parse ∘ format over every base and width, and an agreement
+  check pinning the width-generic masks to `maskV4`, `maskV6`, `parseV4Mask` and `wildcardV4`
+  across their whole domains — 25 component tests, 8 end-to-end and the tools page added to the
+  axe accessibility sweep.
+- Bundle: 48.4 KB gzipped against the 150 KB budget.
+
 ## [1.1.2] — 2026-08-20
 
 ### Added
@@ -509,7 +546,8 @@ implemented, tested and building.
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.0
 [1.1.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.2
 [1.1.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.1
 [1.1.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.0

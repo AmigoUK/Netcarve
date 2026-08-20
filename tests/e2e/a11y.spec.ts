@@ -40,6 +40,12 @@ test.describe('accessibility', () => {
     expect(await audit(app)).toEqual([]);
   });
 
+  test('the tools page has no WCAG A/AA violations', async ({ app }) => {
+    await goToRoute(app, '/tools');
+    await app.locator('#nc-converter').getByLabel('Value', { exact: true }).fill('192.168.1.1');
+    expect(await audit(app)).toEqual([]);
+  });
+
   test('the VLSM solver has no WCAG A/AA violations', async ({ app }) => {
     await goToRoute(app, '/vlsm');
     await app.getByLabel('Base network').fill('192.168.10.0/24');

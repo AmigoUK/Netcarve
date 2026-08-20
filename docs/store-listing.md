@@ -78,6 +78,13 @@ Paste a list of blocks — a merger, a site-to-site VPN, an inherited spreadshee
 duplicates and containment chains immediately. Comments and blank lines are ignored; bad lines
 are named rather than silently dropped. IPv4 and IPv6 are compared separately.
 
+**Bases and bit mathematics**
+A value shown at once in decimal, hexadecimal, binary and its address form, at a width you
+choose from 8 to 128 bits — because NOT 0xFF is not the same answer in eight bits as in
+thirty-two. The bit display is an input: click a bit and every base follows. Alongside it,
+AND/OR/XOR/AND NOT, NOT and shifts on real addresses, and prefix-to-mask conversion in both
+directions with the wildcard and the set-bit count.
+
 **Export that fits your documentation**
 Markdown, plain text, CSV and JSON. The Markdown table drops straight into a client report,
 plain text goes into a ticket or a terminal, and the JSON is a complete backup you can import

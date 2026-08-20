@@ -700,3 +700,8 @@ span.nc-bits__cell {
   border-bottom: 0;
   font-size: var(--text-lg);
 }
+
+/* A value grid holding a single row should not stretch it across the whole panel. */
+.nc-values--single {
+  grid-template-columns: minmax(0, 26rem);
+}
