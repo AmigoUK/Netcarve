@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/preact';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/preact';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { App } from '@/entrypoints/app/App';
 import { setStorageArea } from '@/src/lib/storage/store';
@@ -28,11 +28,21 @@ const typeValue = (text: string) => {
   fireEvent.input(screen.getByLabelText('Value'), { target: { value: text } });
 };
 
+/** All three sections show the same row labels, so every query is scoped to one of them. */
+const section = (id: string): HTMLElement => {
+  const element = document.getElementById(id);
+  if (element === null) throw new Error(`no section ${id}`);
+  return element;
+};
+
 /** The row's value, read from the copy button's accessible name so it is exact. */
-const rowValue = (label: string): string => {
-  const button = screen.getByLabelText(new RegExp(`^Copy ${label}:`));
+const rowValue = (label: string, sectionId = 'nc-converter'): string => {
+  const button = within(section(sectionId)).getByLabelText(new RegExp(`^Copy ${label}:`));
   return (button.getAttribute('aria-label') ?? '').replace(`Copy ${label}: `, '');
 };
+
+const hasRow = (label: string, sectionId = 'nc-converter'): boolean =>
+  within(section(sectionId)).queryByLabelText(new RegExp(`^Copy ${label}:`)) !== null;
 
 describe('the tools page', () => {
   it('is reachable from the nav and starts empty', () => {
@@ -63,8 +73,8 @@ describe('the tools page', () => {
     render(<App version="1.2.0" />);
     typeValue('2001:db8::1');
 
-    await waitFor(() => expect(screen.getByLabelText(/^Copy IPv6 address:/)).toBeInTheDocument());
-    expect(screen.queryByLabelText(/^Copy IPv4 address:/)).not.toBeInTheDocument();
+    await waitFor(() => expect(hasRow('IPv6 address')).toBe(true));
+    expect(hasRow('IPv4 address')).toBe(false);
     expect(screen.getByRole('radio', { name: '128 bits' })).toBeChecked();
   });
 
@@ -88,7 +98,7 @@ describe('the tools page', () => {
     fireEvent.click(screen.getByRole('radio', { name: '8 bits' }));
     await waitFor(() => expect(rowValue('Binary')).toBe('11111111'));
     expect(rowValue('Hexadecimal')).toBe('0xFF');
-    expect(screen.queryByLabelText(/^Copy IPv4 address:/)).not.toBeInTheDocument();
+    expect(hasRow('IPv4 address')).toBe(false);
   });
 
   it('falls back to a natural width rather than trapping the user', async () => {
@@ -119,7 +129,9 @@ describe('the tools page', () => {
   it('counts the set bits', async () => {
     render(<App version="1.2.0" />);
     typeValue('255.255.255.0');
-    await waitFor(() => expect(screen.getByText('24 of 32 bits set')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(within(section('nc-converter')).getByText('24 of 32 bits set')).toBeInTheDocument(),
+    );
   });
 
   it('explains a bare hexadecimal value rather than guessing (FR-TOOL-04)', async () => {
@@ -144,7 +156,7 @@ describe('the tools page', () => {
     typeValue('192.168.1.1');
     await waitFor(() => expect(rowValue('Hexadecimal')).toBe('0xC0A80101'));
 
-    fireEvent.click(screen.getByLabelText(/^Copy Hexadecimal:/));
+    fireEvent.click(within(section('nc-converter')).getByLabelText(/^Copy Hexadecimal:/));
     await waitFor(() =>
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith('0xC0A80101'),
     );
@@ -165,5 +177,113 @@ describe('the tools page', () => {
 
     expect(await screen.findByDisplayValue('0xFF')).toBeInTheDocument();
     await waitFor(() => expect(screen.getByRole('radio', { name: '32 bits' })).toBeChecked());
+  });
+});
+
+describe('the bitwise section (FR-TOOL-05)', () => {
+  const setOperand = (label: string, text: string) =>
+    fireEvent.input(screen.getByLabelText(label), { target: { value: text } });
+
+  it('masks an address with AND, the way an engineer would', async () => {
+    render(<App version="1.2.0" />);
+    setOperand('Operand A', '10.20.30.40');
+    setOperand('Operand B', '255.255.0.0');
+
+    await waitFor(() => expect(rowValue('Result', 'nc-bitwise')).toBe('10.20.0.0'));
+  });
+
+  it('offers OR, XOR and AND NOT', async () => {
+    render(<App version="1.2.0" />);
+    setOperand('Operand A', '0x0F');
+    setOperand('Operand B', '0xF0');
+
+    fireEvent.change(screen.getByLabelText('Operation'), { target: { value: 'or' } });
+    await waitFor(() => expect(rowValue('Hexadecimal', 'nc-bitwise')).toBe('0x000000FF'));
+
+    fireEvent.change(screen.getByLabelText('Operation'), { target: { value: 'xor' } });
+    await waitFor(() => expect(rowValue('Hexadecimal', 'nc-bitwise')).toBe('0x000000FF'));
+
+    setOperand('Operand B', '0x0C');
+    fireEvent.change(screen.getByLabelText('Operation'), { target: { value: 'andnot' } });
+    await waitFor(() => expect(rowValue('Hexadecimal', 'nc-bitwise')).toBe('0x00000003'));
+  });
+
+  it('turns a mask into its wildcard with NOT, and hides the second operand', async () => {
+    render(<App version="1.2.0" />);
+    setOperand('Operand A', '255.255.255.0');
+    fireEvent.change(screen.getByLabelText('Operation'), { target: { value: 'not' } });
+
+    await waitFor(() => expect(rowValue('Result', 'nc-bitwise')).toBe('0.0.0.255'));
+    expect(screen.queryByLabelText('Operand B')).not.toBeInTheDocument();
+  });
+
+  it('shifts, truncating at the width', async () => {
+    render(<App version="1.2.0" />);
+    setOperand('Operand A', '0x01');
+    fireEvent.change(screen.getByLabelText('Operation'), { target: { value: 'shl' } });
+    fireEvent.input(screen.getByLabelText('Shift by'), { target: { value: '24' } });
+
+    await waitFor(() => expect(rowValue('Hexadecimal', 'nc-bitwise')).toBe('0x01000000'));
+
+    fireEvent.input(screen.getByLabelText('Shift by'), { target: { value: '32' } });
+    await waitFor(() => expect(rowValue('Hexadecimal', 'nc-bitwise')).toBe('0x00000000'));
+  });
+
+  it('reports an operand it cannot read', async () => {
+    render(<App version="1.2.0" />);
+    setOperand('Operand A', 'nonsense!');
+    expect(await screen.findByRole('alert')).toHaveTextContent(/not a number NetCarve can read/);
+  });
+});
+
+describe('the masks section', () => {
+  it('converts a prefix to a mask', async () => {
+    render(<App version="1.2.0" />);
+    fireEvent.input(screen.getByLabelText('Prefix length'), { target: { value: '26' } });
+    await waitFor(() => expect(screen.getByDisplayValue('255.255.255.192')).toBeInTheDocument());
+    expect(rowValue('Wildcard mask', 'nc-masks')).toBe('0.0.0.63');
+  });
+
+  it('converts a mask back to a prefix', async () => {
+    render(<App version="1.2.0" />);
+    fireEvent.input(screen.getByLabelText('Subnet mask'), { target: { value: '255.255.240.0' } });
+    await waitFor(() => expect(screen.getByDisplayValue('20')).toBeInTheDocument());
+  });
+
+  it('refuses a mask that is not contiguous', async () => {
+    render(<App version="1.2.0" />);
+    fireEvent.input(screen.getByLabelText('Subnet mask'), { target: { value: '255.0.255.0' } });
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      /run of ones followed only by zeros/,
+    );
+  });
+});
+
+describe('the converter export', () => {
+  it('copies the whole table', async () => {
+    render(<App version="1.2.0" />);
+    typeValue('192.168.1.1');
+    await waitFor(() => expect(rowValue('Decimal')).toBe('3232235777'));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Copy as Markdown' }));
+    await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalled());
+
+    const [markdown] = vi.mocked(navigator.clipboard.writeText).mock.calls[0] as [string];
+    expect(markdown).toContain('| Decimal | 3232235777 |');
+    expect(markdown).toContain('| Hexadecimal | 0xC0A80101 |');
+    expect(markdown).toContain('| IPv4 address | 192.168.1.1 |');
+  });
+});
+
+describe('the calculator cross-link (FR-TOOL-07)', () => {
+  it('hands the network address to the converter', async () => {
+    globalThis.location.hash = '#/calc';
+    render(<App version="1.2.0" />);
+    fireEvent.input(screen.getByLabelText('IP address or CIDR block'), {
+      target: { value: '192.168.1.37/24' },
+    });
+
+    const link = await screen.findByRole('link', { name: /Open in converter/ });
+    expect(link).toHaveAttribute('href', '#/tools?v=192.168.1.0&w=32');
   });
 });

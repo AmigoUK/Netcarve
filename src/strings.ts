@@ -128,6 +128,29 @@ export const strings = {
     setBits: (count: number, width: number) => `${count} of ${width} bits set`,
     empty: 'Type a value to see it in every base.',
     openInConverter: 'Open in converter',
+
+    bitwiseTitle: 'Bitwise',
+    bitwiseHint: 'Both operands are read at the width of the first, so a result never mixes widths.',
+    operandA: 'Operand A',
+    operandB: 'Operand B',
+    operation: 'Operation',
+    shiftBy: 'Shift by',
+    result: 'Result',
+    ops: {
+      and: 'AND',
+      or: 'OR',
+      xor: 'XOR',
+      andnot: 'AND NOT',
+      not: 'NOT',
+      shl: 'Shift left',
+      shr: 'Shift right',
+    },
+
+    masksTitle: 'Masks & prefixes',
+    masksHint: 'IPv4, because a dotted mask is an IPv4 spelling — IPv6 uses prefix lengths alone.',
+    prefixLabel: 'Prefix length',
+    maskLabel: 'Subnet mask',
+    wildcardLabel: 'Wildcard mask',
   },
 
   projects: {

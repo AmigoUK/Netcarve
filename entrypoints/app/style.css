@@ -688,3 +688,15 @@ span.nc-bits__cell {
     min-width: 1.1rem;
   }
 }
+
+.nc-operands {
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.nc-result-row {
+  justify-content: flex-start;
+  gap: var(--space-3);
+  border-bottom: 0;
+  font-size: var(--text-lg);
+}

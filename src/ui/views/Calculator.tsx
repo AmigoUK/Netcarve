@@ -75,6 +75,12 @@ export function Calculator({
               <span class="nc-calc__prefix">/{result.prefix}</span>
             </Copyable>
             <span class="nc-chip nc-mono">IPv{result.family}</span>
+            <a
+              class="nc-button nc-button--quiet"
+              href={`#/tools?v=${encodeURIComponent(result.networkText)}&w=${result.family === 4 ? 32 : 128}`}
+            >
+              {strings.tools.openInConverter} →
+            </a>
           </div>
 
           <PrefixStepper result={result} onChange={onChange} />

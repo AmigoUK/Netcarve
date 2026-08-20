@@ -235,7 +235,13 @@ export function App({ version }: AppProps) {
         )}
 
         {route.name === 'tools' && (
-          <Tools key={`${toolsValue}|${toolsWidth ?? ''}`} initialValue={toolsValue} initialWidth={toolsWidth} />
+          <Tools
+            key={`${toolsValue}|${toolsWidth ?? ''}`}
+            initialValue={toolsValue}
+            initialWidth={toolsWidth}
+            exportFooter={settings.settings.exportFooter}
+            copyFormat={settings.settings.defaultCopyFormat}
+          />
         )}
 
         {route.name === 'calc' && (
