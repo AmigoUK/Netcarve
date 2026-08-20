@@ -9,6 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.2.4] — 2026-08-20
+
+### Fixed
+- **The planner row fitted its container exactly, and CI's fonts tipped it over.** The row's
+  flexible name column carried `flex: 1 1 8rem` but the default `min-width: auto`, so it would
+  not shrink below its own content: locally every width measured a slack of exactly zero, and a
+  machine rendering monospace a few pixels wider overflowed by eight. The name column now
+  shrinks and truncates, the address range gives way before the row can break, and both are
+  reachable — the name carries a `title`.
+- Below 60 rem the dotted mask is dropped along with the range. The prefix on the same row
+  already states it, and the space is what makes the name readable rather than 58 px wide.
+
+### Changed
+- `layout.spec.ts` samples the band where the planner row is tightest — 1280, 1100, 1024, 960
+  and 768 px — instead of stepping over it, and drives a deliberately awkward plan: names of
+  sixty-odd characters, four-digit VLAN IDs and five levels of nesting. A layout that fits
+  exactly is a layout that breaks somewhere else, so the spec now measures slack rather than
+  fit.
+- The invariant treats `text-overflow: ellipsis` as a declaration of intent and no longer
+  reports it. Clipping *without* that declaration is still a fault.
+
+### Note
+This is the first defect the layout invariants caught in CI rather than on this machine, which
+is the whole reason they run there: font metrics differ between environments, and a layout with
+no slack is a layout that depends on the fonts of whoever built it.
+
 ## [1.2.3] — 2026-08-20
 
 ### Added
@@ -616,7 +642,8 @@ implemented, tested and building.
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.2.3...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.2.4...HEAD
+[1.2.4]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.4
 [1.2.3]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.3
 [1.2.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.2
 [1.2.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.1

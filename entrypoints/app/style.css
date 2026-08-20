@@ -413,7 +413,12 @@
 }
 
 .nc-tree__range {
-  min-width: 16rem;
+  /* Nice to have, not essential: it gives way before the row can overflow. */
+  flex: 0 1 16rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .nc-tree__usable {
@@ -423,6 +428,13 @@
 
 .nc-tree__name {
   flex: 1 1 8rem;
+  /* A flex item will not shrink below its content unless told to. Without this the row fits
+     its container exactly — and a font that renders a few pixels wider, as CI's does, tips it
+     over. A name column that truncates is the point of a name column. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-weight: 600;
 }
 
@@ -494,8 +506,12 @@
 .nc-swatch--pink { background: var(--palette-pink-dot); }
 .nc-swatch--grey { background: var(--palette-grey-dot); }
 
+/* Narrow windows drop the columns that can be derived from what is left: the range first,
+   then the mask, which the prefix on the same row already states. What must never be squeezed
+   to nothing is the name. */
 @media (max-width: 60rem) {
-  .nc-tree__range {
+  .nc-tree__range,
+  .nc-tree__mask {
     display: none;
   }
 }

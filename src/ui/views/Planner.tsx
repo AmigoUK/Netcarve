@@ -478,7 +478,11 @@ function TreeRow(props: TreeRowProps) {
         {summary.mask !== '' && <span class="nc-tree__mask nc-mono">{summary.mask}</span>}
         <span class="nc-tree__range nc-mono">{summary.range}</span>
         <span class="nc-tree__usable nc-mono">{summary.usable.primary}</span>
-        <span class={`nc-tree__name${row.node.name === undefined ? ' is-empty' : ''}`}>
+        {/* The column truncates on a narrow window, so the full name stays reachable. */}
+        <span
+          class={`nc-tree__name${row.node.name === undefined ? ' is-empty' : ''}`}
+          title={row.node.name}
+        >
           {row.node.name ?? strings.planner.unnamed}
         </span>
         {row.node.vlanId !== undefined && (

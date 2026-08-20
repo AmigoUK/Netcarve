@@ -1,5 +1,5 @@
 import { test, expect, goToRoute, resetStorage } from './fixtures';
-import { ACME } from '../store/seed';
+import { ACME, seedProject } from '../store/seed';
 import type { Page } from '@playwright/test';
 
 /**
@@ -15,13 +15,54 @@ import type { Page } from '@playwright/test';
  * themes and three window widths, and name the offending element when they fail.
  */
 
-/** Window widths the full-page app is expected to survive. */
-const WIDTHS = [1280, 1024, 768] as const;
+/**
+ * Window widths the full-page app is expected to survive.
+ *
+ * The band between the shell's 1180 px maximum and the 960 px breakpoint is where the planner
+ * row is tightest, so it is sampled rather than skipped: the first CI failure of this spec was
+ * an 8 px overflow at 1024 px that this machine's fonts happened to render just inside.
+ */
+const WIDTHS = [1280, 1100, 1024, 960, 768] as const;
+
+/**
+ * A deliberately awkward plan: long names, four-digit VLAN IDs and deep nesting, because a row
+ * that fits its container exactly is a row that overflows on any machine whose fonts render a
+ * few pixels wider. Layouts have to have slack, and slack is what this measures.
+ */
+const STRESS = seedProject({
+  id: 'layout-stress-0000-4000-8000-000000000001',
+  name: 'A project name long enough to test the header as well as the card',
+  client: 'A client with a rather long trading name Ltd',
+  createdAt: Date.UTC(2026, 0, 1),
+  updatedAt: Date.UTC(2026, 0, 2),
+  roots: [
+    {
+      cidr: '10.20.0.0/16',
+      leaves: [
+        {
+          cidr: '10.20.0.0/20',
+          name: 'VLAN 3000 — Guest Wi-Fi, contractors and the visitor lobby printers',
+          vlanId: 3000,
+          colour: 'blue',
+        },
+        {
+          cidr: '10.20.16.0/20',
+          name: 'VLAN 4094 — out-of-band management, jump hosts and the console server',
+          vlanId: 4094,
+          colour: 'teal',
+        },
+        { cidr: '10.20.32.0/19', name: 'Servers', vlanId: 100, colour: 'green' },
+        { cidr: '10.20.64.0/18' },
+        { cidr: '10.20.128.0/17' },
+      ],
+    },
+  ],
+});
 
 const ROUTES = [
   { path: '/calc', settle: '.nc-calc' },
   { path: '/projects', settle: '.nc-cards, .nc-empty' },
-  { path: `/planner/${ACME.id}`, settle: '.nc-tree' },
+  { path: `/planner/${STRESS.id}`, settle: '.nc-tree' },
   { path: '/vlsm', settle: '.nc-requirements' },
   { path: '/conflicts', settle: '.nc-textarea' },
   { path: '/tools', settle: '#nc-masks' },
@@ -59,8 +100,12 @@ async function overflowing(page: Page, allowScrollable: boolean): Promise<string
       if (globalThis.getComputedStyle(element).clipPath !== 'none') continue;
       if (element.scrollWidth <= element.clientWidth + 1) continue;
 
-      const overflowX = globalThis.getComputedStyle(element).overflowX;
-      const scrollable = overflowX === 'auto' || overflowX === 'scroll';
+      const style = globalThis.getComputedStyle(element);
+      // `text-overflow: ellipsis` is an element saying "I will truncate, and that is the
+      // design". Clipping without it is the fault this looks for.
+      if (style.textOverflow === 'ellipsis') continue;
+
+      const scrollable = style.overflowX === 'auto' || style.overflowX === 'scroll';
       if (scrollable && allow) continue;
 
       found.push(`${describe(element)} (${element.scrollWidth} > ${element.clientWidth})`);
@@ -71,9 +116,9 @@ async function overflowing(page: Page, allowScrollable: boolean): Promise<string
 
 async function seed(page: Page, theme: 'light' | 'dark'): Promise<void> {
   await page.evaluate(
-    async ([project, mode]) => {
+    async ([projects, mode]) => {
       await chrome.storage.local.set({
-        'netcarve:projects': [project],
+        'netcarve:projects': projects,
         'netcarve:settings': {
           schemaVersion: 1,
           theme: mode,
@@ -83,7 +128,7 @@ async function seed(page: Page, theme: 'light' | 'dark'): Promise<void> {
         },
       });
     },
-    [ACME, theme] as const,
+    [[ACME, STRESS], theme] as const,
   );
   await page.reload();
   await page.waitForSelector('.nc-shell');
