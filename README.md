@@ -70,6 +70,7 @@ npm run typecheck   # tsc --noEmit
 npm run test:e2e    # end-to-end suite against the real build (Playwright + Chrome)
 npm run preview     # render every view, light and dark, into .output/preview
 npm run screenshots # regenerate the Chrome Web Store assets in docs/store/
+npm run ci          # wait for CI on the current commit and report what it did
 ```
 
 ### Looking at the pixels
@@ -115,8 +116,14 @@ Load the unpacked extension from `.output/chrome-mv3` via `chrome://extensions` 
 node scripts/release.mjs <version> "<summary>" <notes-file>
 ```
 
-Bumps `package.json`, folds the notes into `CHANGELOG.md`, commits, tags and opens the GitHub
-release in one step.
+Bumps `package.json`, folds the notes into `CHANGELOG.md`, builds the installable archive,
+commits and pushes — then **waits for CI on that commit, and only tags and publishes if it is
+green**. Two releases went out red before this gate existed, and the failure was real: a layout
+that fitted its container exactly on the machine that built it and overflowed on CI's fonts.
+"Green on my machine" is a different claim from "green".
+
+If CI fails the commit stays on `main` untagged; fix it and run the same command again with the
+same version. `--skip-ci` is there for a repository without a workflow.
 
 ## Documentation
 

@@ -9,6 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.2.5] — 2026-08-20
+
+### Added
+- **`npm run ci`** waits for the CI run on the current commit and reports what it did. A red run
+  names the job and the step that broke, links the run and prints the command that fetches the
+  logs, rather than saying only that something failed.
+- **The release gate.** `scripts/release.mjs` now commits, pushes, **waits for CI on that
+  commit, and only tags and publishes if it is green.** v1.2.2 and v1.2.3 were both published
+  with failing CI, and the failure was real: a planner row that fitted its container to the
+  pixel on the machine that built it and overflowed by eight on CI's fonts. "Green on my
+  machine" is a different claim from "green".
+
+  If CI fails the commit stays on `main` untagged — fix it and run the same command again with
+  the same version. `--skip-ci` is the escape hatch for a repository with no workflow.
+
+### Changed
+- `docs/qa.md` opens with three gates before the manual pass: the layout invariants, the render
+  pass, and CI on the commit being shipped. A suite that passes here and fails there has found a
+  real difference in fonts, timing or metrics — that is a finding, not a flake.
+
 ## [1.2.4] — 2026-08-20
 
 ### Fixed
@@ -642,7 +662,8 @@ implemented, tested and building.
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.2.4...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.2.5...HEAD
+[1.2.5]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.5
 [1.2.4]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.4
 [1.2.3]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.3
 [1.2.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.2

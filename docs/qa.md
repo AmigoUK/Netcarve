@@ -20,6 +20,9 @@ Build under test: `npm run build` → load `.output/chrome-mv3` via `chrome://ex
 - [ ] `npm run preview` — renders every view in both themes into `.output/preview`. **Open
       them.** The measurements above cannot see a row that is merely ugly; that still takes an
       eye, and this is where the last three layout defects were finally spotted.
+- [ ] `npm run ci` — green on the commit you are about to ship. A suite that passes here and
+      fails there has found a real difference, not a flake: fonts, timing and screen metrics all
+      differ between machines. `release.mjs` will not tag a red commit.
 
 ## 1. Install and permissions
 

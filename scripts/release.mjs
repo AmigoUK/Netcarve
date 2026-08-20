@@ -4,13 +4,22 @@
  * archive, commits, tags, pushes and opens the matching GitHub Release with the archive
  * attached.
  *
- *   node scripts/release.mjs <version> "<one-line summary>" <notes-file> [--no-push] [--no-package]
+ *   node scripts/release.mjs <version> "<one-line summary>" <notes-file> [--no-push] [--no-package] [--skip-ci]
  *
  * `notes-file` holds the Keep-a-Changelog body for this version (### Added / ### Fixed …).
  * It becomes both the CHANGELOG section and the body of the commit message and release.
  *
  * Every release carries `netcarve-<version>-chrome.zip`, so a reader of the releases page can
  * install the extension without a toolchain — see `docs/install.md`.
+ *
+ * **The tag is created only after CI passes on the pushed commit.** Two releases went out red
+ * before anyone looked, and the failure was real. So the order is: commit, push, wait for CI,
+ * and only then tag and publish. `--skip-ci` is the escape hatch for a repository without a
+ * workflow.
+ *
+ * If CI fails, the commit stays on `main` untagged. Fix it, then run this again with the same
+ * version — the CHANGELOG section and the version bump are already in place, so it will commit
+ * the fix and pick up where it left off.
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -25,6 +34,7 @@ if (!version || !summary || !notesFile) {
 }
 const push = !flags.includes('--no-push');
 const packageArchive = !flags.includes('--no-package');
+const waitForCi = push && !flags.includes('--skip-ci');
 const notes = readFileSync(notesFile, 'utf8').trim();
 const today = new Date().toISOString().slice(0, 10);
 const REPO = 'https://github.com/AmigoUK/Netcarve';
@@ -66,13 +76,30 @@ if (packageArchive) {
   }
 }
 
-// 4. commit, tag, push, release
+// 4. commit and push — the push is what starts CI
 const message = `chore(release): v${version} — ${summary}\n\n${notes}\n\nCo-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>`;
 run('git', ['add', '-A']);
 run('git', ['commit', '-m', message]);
-run('git', ['tag', '-a', `v${version}`, '-m', `v${version} — ${summary}`]);
+
 if (push) {
   run('git', ['push', 'origin', 'main']);
+
+  // 5. no tag, and no release, until the build is green somewhere other than this machine
+  if (waitForCi) {
+    try {
+      execFileSync('node', [fileURLToPath(new URL('./ci-status.mjs', import.meta.url))], {
+        stdio: 'inherit',
+      });
+    } catch {
+      console.error(
+        `\nv${version} was not tagged: CI failed on the commit just pushed.\n` +
+          `Fix it, then run this again with the same version.`,
+      );
+      process.exit(1);
+    }
+  }
+
+  run('git', ['tag', '-a', `v${version}`, '-m', `v${version} — ${summary}`]);
   run('git', ['push', 'origin', `v${version}`]);
   const body = `${notes}\n\n---\n\n### Install it\n\nDownload \`netcarve-${version}-chrome.zip\` below, unzip it, then in Chrome open \`chrome://extensions\`, turn on **Developer mode** and press **Load unpacked** on the unzipped folder. Full instructions, including Edge and updating an existing install: [docs/install.md](${REPO}/blob/v${version}/docs/install.md).\n\nTwo permissions, no host access, no network requests.`;
 
@@ -86,5 +113,7 @@ if (push) {
     body,
     ...(packageArchive ? [`${archive}#NetCarve ${version} — unpacked extension (Chrome, Edge, Brave)`] : []),
   ]);
+} else {
+  run('git', ['tag', '-a', `v${version}`, '-m', `v${version} — ${summary}`]);
 }
 console.log(`released v${version}`);
