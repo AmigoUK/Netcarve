@@ -20,14 +20,21 @@ interface ExtensionFixtures {
 /**
  * Launches a throwaway Chrome profile with the unpacked extension loaded.
  *
- * `--load-extension` needs a real browser window; the npm script wraps the run in
- * `xvfb-run` so the same command works on a headless machine.
+ * Chromium's headless mode has supported `--load-extension` since the "new headless" rewrite,
+ * so the suite runs without a display server — no Xvfb, and the same command works on a
+ * developer laptop and in CI. Set `NETCARVE_HEADED=1` to watch a run in a real window while
+ * debugging.
+ *
+ * The `chromium` channel matters: it is the full browser build. The default
+ * `chromium-headless-shell` is a stripped binary with no extension support at all.
  */
+export const HEADED = process.env.NETCARVE_HEADED === '1';
+
 export const test = base.extend<ExtensionFixtures>({
   context: async ({ }, use) => {
     const profile = await mkdtemp(join(tmpdir(), 'netcarve-e2e-'));
     const context = await chromium.launchPersistentContext(profile, {
-      headless: false,
+      headless: !HEADED,
       channel: 'chromium',
       viewport: { width: 1280, height: 800 },
       args: [

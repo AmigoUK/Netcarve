@@ -46,7 +46,16 @@ body {
   overflow-y: auto;
 }
 
-/* The popup is 400px wide: keep the rulers legible by letting them scroll. */
+/* The popup is 400 px wide, so the rulers need their own sizing.
+   The eight IPv6 groups still scroll — four hex digits cannot usefully shrink further. */
 .nc-popup .nc-ruler__cells[data-family='6'] .nc-ruler__cell {
   min-width: 3rem;
+}
+
+/* The 32 IPv4 bit cells plus their octet gaps overflow 400 px at the shared minimum width,
+   and a half-cut final octet reads as broken rather than scrollable. Here they share the
+   width equally instead, which keeps all four octets in frame. */
+.nc-popup .nc-ruler__cells[data-family='4'] .nc-ruler__cell {
+  flex: 1 1 0;
+  min-width: 0;
 }

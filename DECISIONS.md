@@ -137,3 +137,26 @@ button would only add a step between changing a host count and seeing what it do
 The splitting step naturally leaves a ladder of fragments. The free list merges any two halves
 that are still whole before it is shown, so it reports the largest blocks actually available
 rather than the shape the algorithm happened to leave behind.
+
+---
+
+## D16 — The end-to-end suite runs headless, without Xvfb
+
+**Earlier assumption, now wrong:** the suite was built on the belief that Chrome only loads MV3
+extensions in a headed window, so `npm run test:e2e` and `npm run screenshots` were wrapped in
+`xvfb-run`.
+
+**Decision:** Chromium's *new* headless mode supports `--load-extension`, so the fixtures launch
+with `headless: true` and the Xvfb wrapper is gone from the npm scripts and from CI. The whole
+100-test suite and the store-asset generator pass this way.
+
+Two details matter and are recorded in `tests/e2e/fixtures.ts`:
+
+- `channel: 'chromium'` is required. It selects the full browser build; Playwright's default
+  `chromium-headless-shell` is a stripped binary with no extension support at all.
+- `NETCARVE_HEADED=1` (via `npm run test:e2e:headed`) still opens a real window, which is what
+  you want when a selector is misbehaving and you need to watch it.
+
+The immediate payoff was a defect nobody had seen: the first headless capture of the popup
+showed the 32-cell bit ruler overflowing 400 px and cutting the final octet in half. Fixed in the
+popup stylesheet, and now guarded by an end-to-end assertion that the ruler never overflows.

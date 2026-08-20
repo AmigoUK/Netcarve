@@ -44,10 +44,11 @@ npm run test:e2e    # end-to-end suite against the real build (Playwright + Chro
 npm run screenshots # regenerate the Chrome Web Store assets in docs/store/
 ```
 
-On a headless machine the browser needs a display, so use the wrapped variants:
+The end-to-end suite runs headless — Chromium's new headless mode loads unpacked extensions,
+so no display server is involved. To watch a run in a real window while debugging:
 
 ```bash
-npm run test:e2e:xvfb
+npm run test:e2e:headed
 ```
 
 Load the unpacked extension from `.output/chrome-mv3` via `chrome://extensions` → *Load unpacked*.

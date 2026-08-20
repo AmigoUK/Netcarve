@@ -175,7 +175,7 @@ All three can be certified truthfully:
 ## 4. Before you press submit
 
 - [ ] `npm test` — unit and component tests pass.
-- [ ] `npm run test:e2e` (or `test:e2e:xvfb` on a headless machine) — the end-to-end suite passes
+- [ ] `npm run test:e2e` — the end-to-end suite passes
       against the real build.
 - [ ] `npm run typecheck` — clean.
 - [ ] `npm run screenshots` — assets regenerated from the version being shipped, so the version

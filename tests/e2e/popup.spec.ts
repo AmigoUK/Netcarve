@@ -15,6 +15,23 @@ test.describe('the toolbar popup', () => {
     await popup.close();
   });
 
+  test('fits all 32 bits of the ruler inside the popup width', async ({ context, extensionId }) => {
+    // Chrome caps the popup at 400 px. A ruler wider than that scrolls, which reads as a
+    // clipped final octet — the store screenshot is where this first showed up.
+    const popup = await context.newPage();
+    await popup.setViewportSize({ width: 400, height: 600 });
+    await popup.goto(`chrome-extension://${extensionId}/popup.html`);
+    await popup.getByLabel('IP address or CIDR block').fill('192.168.1.0/24');
+    await expect(popup.locator('.nc-ruler__cells[data-family="4"] li')).toHaveCount(32);
+
+    const overflow = await popup.evaluate(() => {
+      const cells = document.querySelector('.nc-ruler__cells[data-family="4"]');
+      return cells === null ? -1 : cells.scrollWidth - cells.clientWidth;
+    });
+    expect(overflow).toBeLessThanOrEqual(0);
+    await popup.close();
+  });
+
   test('restores the last input it was given (FR-CALC-07)', async ({ context, extensionId }) => {
     const popup = await context.newPage();
     await popup.goto(`chrome-extension://${extensionId}/popup.html`);

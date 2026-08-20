@@ -3,9 +3,10 @@ import { defineConfig } from '@playwright/test';
 /**
  * End-to-end coverage for the packed extension.
  *
- * Chrome only loads MV3 extensions in a headed browser, so every run goes through a
- * persistent context under Xvfb (see `npm run test:e2e`). The suite always runs against
- * `.output/chrome-mv3`, which `pretest:e2e` rebuilds first.
+ * The suite drives a persistent Chrome profile with the unpacked build loaded. Chromium's
+ * new headless mode supports `--load-extension`, so no display server is needed; see
+ * `tests/e2e/fixtures.ts`. Every run is against `.output/chrome-mv3`, which the npm script
+ * rebuilds first.
  */
 export default defineConfig({
   testDir: './tests/e2e',

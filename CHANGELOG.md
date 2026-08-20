@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.1.1] — 2026-08-20
+
+### Changed
+- The end-to-end suite and the store-asset generator now run **headless**. Chromium's new
+  headless mode loads unpacked extensions, so `xvfb-run` is gone from `npm run test:e2e`, from
+  `npm run screenshots` and from CI. `channel: 'chromium'` is what makes it work — the default
+  `chromium-headless-shell` has no extension support (DECISIONS D16).
+- `npm run test:e2e:xvfb` is replaced by `npm run test:e2e:headed`, which sets
+  `NETCARVE_HEADED=1` and opens a real window for debugging a selector.
+
+### Fixed
+- The popup's bit ruler no longer overflows the 400 px popup: the 32 IPv4 bit cells now share
+  the width instead of scrolling, so all four octets stay in frame. The first headless capture
+  of the store screenshot is what exposed it — the final octet was cut in half.
+
+### Added
+- An end-to-end assertion that the popup ruler never overflows its container. Verified to fail
+  (20 px of overflow) with the fix reverted.
+
+### Verified
+- 586 unit and component tests, 100 end-to-end tests, all passing headless.
+- Store assets regenerated from this build; four of the five screenshots came out byte-identical
+  to the headed run, which is a decent reproducibility signal.
+
 ## [1.1.0] — 2026-08-19
 
 ### Added
@@ -466,7 +490,8 @@ implemented, tested and building.
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.1
 [1.1.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.0
 [1.0.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.2
 [1.0.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.1
