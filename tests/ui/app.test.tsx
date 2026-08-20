@@ -131,3 +131,31 @@ describe('Settings', () => {
     expect(await screen.findByText('Everything has been removed.')).toBeInTheDocument();
   });
 });
+
+describe('the About block', () => {
+  it('links to the exact release this build came from', async () => {
+    globalThis.location.hash = '#/settings';
+    render(<App version="4.5.6" />);
+
+    const release = await screen.findByRole('link', { name: 'v4.5.6 release notes' });
+    expect(release).toHaveAttribute(
+      'href',
+      'https://github.com/AmigoUK/Netcarve/releases/tag/v4.5.6',
+    );
+  });
+
+  it('carries the source, changelog, issues and licence', async () => {
+    globalThis.location.hash = '#/settings';
+    render(<App version="4.5.6" />);
+
+    const href = async (name: string) =>
+      (await screen.findByRole('link', { name })).getAttribute('href');
+
+    expect(await href('AmigoUK/Netcarve')).toBe('https://github.com/AmigoUK/Netcarve');
+    expect(await href('CHANGELOG.md')).toBe(
+      'https://github.com/AmigoUK/Netcarve/blob/v4.5.6/CHANGELOG.md',
+    );
+    expect(await href('Open an issue')).toBe('https://github.com/AmigoUK/Netcarve/issues/new');
+    expect(await href('MIT')).toBe('https://github.com/AmigoUK/Netcarve/blob/v4.5.6/LICENSE');
+  });
+});

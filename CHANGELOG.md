@@ -9,6 +9,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.2.2] — 2026-08-20
+
+### Added
+- **`tests/e2e/layout.spec.ts` — layout invariants that measure.** Nothing may overflow its
+  container, across every route, both themes and 1280/1024/768 px; inside the popup, pinned at
+  400 px, even a deliberately scrollable container has to fit, because Chrome gives no
+  comfortable way to scroll sideways there. A failure names the offending element and by how
+  many pixels.
+- **`npm run preview`** renders every view, both themes and the popup, into `.output/preview`.
+  Overflow can be measured; *ugly* cannot, and the only thing that catches ugly is an eye — this
+  makes looking one command instead of a chore nobody does.
+- The About panel now carries real repository data: source, **the release notes for the exact
+  version running**, the changelog and licence at that same tag, an issue link, and who built
+  it. A bug report can now name the build without anyone working out what they are running.
+
+### Fixed
+- **The calculator scrolled the whole page sideways on IPv6.** An expanded IPv6 address is 39
+  unbroken characters, and a flex item defaults to `min-width: auto`, so the value refused to
+  shrink and pushed the document to 1364 px in a 1280 px window. Found by the new invariant
+  within a minute of it existing — the defect had shipped in every release since v0.4.0.
+- The popup's IPv6 group ruler no longer scrolls: its eight groups now share the width, as the
+  IPv4 ruler already did. A ruler that scrolls in a popup is a ruler whose last groups nobody
+  sees.
+- Two About links wrapped mid-word (`…/Ne` / `tcarve`). Shortened to fit — caught by looking at
+  a render, which is precisely the class of defect no assertion covers.
+
+### Changed
+- The README and `docs/qa.md` explain both nets and when to reach for each. The QA checklist now
+  opens with them, before the manual pass.
+
 ## [1.2.1] — 2026-08-20
 
 ### Changed
@@ -570,7 +600,8 @@ implemented, tested and building.
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.2.2...HEAD
+[1.2.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.2
 [1.2.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.1
 [1.2.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.2.0
 [1.1.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.2

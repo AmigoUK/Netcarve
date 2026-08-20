@@ -122,6 +122,8 @@
 
 .nc-copyable {
   display: inline-flex;
+  max-width: 100%;
+  min-width: 0;
   align-items: baseline;
   gap: var(--space-2);
   padding: 1px var(--space-1);
@@ -135,6 +137,12 @@
 
 .nc-copyable:hover {
   background: var(--accent-wash);
+}
+
+.nc-copyable__value {
+  /* Addresses have no spaces to break at, so an over-long one wraps mid-value rather than
+     overflowing. Wrapping an address is untidy; a page that scrolls sideways is broken. */
+  overflow-wrap: anywhere;
 }
 
 .nc-copyable__hint {
@@ -359,6 +367,12 @@
 
 .nc-values__row dd {
   margin: 0;
+  /* A flex item defaults to min-width:auto, which refuses to shrink below its content — an
+     expanded IPv6 address is 39 unbroken characters and pushed the whole page sideways.
+     Addresses and URLs have no spaces to break at, so they wrap mid-value instead: an untidy
+     wrap beats a page that scrolls sideways. */
+  min-width: 0;
+  overflow-wrap: anywhere;
   text-align: right;
   font-size: var(--text-sm);
 }

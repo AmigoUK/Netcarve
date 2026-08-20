@@ -315,6 +315,17 @@ export const strings = {
     deleteAllConfirmWord: 'DELETE',
     deleteAllDone: 'Everything has been removed.',
     aboutTitle: 'About',
+    about: {
+      source: 'Source code',
+      release: 'This release',
+      releaseValue: (version: string) => `v${version} release notes`,
+      issues: 'Report an issue',
+      issuesValue: 'Open an issue',
+      changelog: 'Changelog',
+      licence: 'Licence',
+      licenceValue: 'MIT',
+      builtBy: 'Built by',
+    },
   },
 
   exports: {

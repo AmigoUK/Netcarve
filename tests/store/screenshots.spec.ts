@@ -285,6 +285,8 @@ test.describe('Gallery', () => {
     await seed(app);
     await goToRoute(app, '/settings');
     await expect(app.getByRole('heading', { name: 'Settings' })).toBeVisible();
+    // About sits at the bottom of a long page; scroll so the release links are in frame.
+    await scrollTo(app, '.nc-danger-zone');
     await settle(app);
     await app.screenshot({ path: `${GALLERY}settings.png` });
   });

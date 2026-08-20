@@ -68,8 +68,27 @@ npm test            # unit and component tests (Vitest)
 npm run coverage    # coverage; src/lib/ip must stay at 100 % branches
 npm run typecheck   # tsc --noEmit
 npm run test:e2e    # end-to-end suite against the real build (Playwright + Chrome)
+npm run preview     # render every view, light and dark, into .output/preview
 npm run screenshots # regenerate the Chrome Web Store assets in docs/store/
 ```
+
+### Looking at the pixels
+
+Three layout defects reached a release before anyone looked at a render: a bit ruler overflowing
+the 400 px popup, a link wrapping across three lines beside it, and a value row stretched across
+a grid meant for four. None of them showed up in the DOM tests, which assert what the markup
+*says* rather than what it *measures* — and none would have been caught by comparing screenshots
+against a baseline either, since all three were wrong from their first commit and the baseline
+would have enshrined them.
+
+So there are two nets, and they catch different things:
+
+- **`tests/e2e/layout.spec.ts`** measures. Nothing may overflow its container, across every
+  route, both themes and three window widths; in the popup, pinned at 400 px, even a
+  deliberately scrollable container has to fit. It names the offending element when it fails.
+- **`npm run preview`** renders every view in both themes so you can look. Overflow is
+  mechanical; *ugly* is not, and the only thing that catches ugly is an eye. **Run it, and open
+  the renders, before calling any UI change done.**
 
 The end-to-end suite runs headless — Chromium's new headless mode loads unpacked extensions,
 so no display server is involved. To watch a run in a real window while debugging:

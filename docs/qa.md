@@ -12,6 +12,15 @@ Build under test: `npm run build` → load `.output/chrome-mv3` via `chrome://ex
 
 ---
 
+## 0. Before the manual pass
+
+- [ ] `npm run test:e2e` — includes `layout.spec.ts`, which fails on anything overflowing its
+      container across every route, both themes and 1280/1024/768 px, and on anything at all
+      overflowing inside the 400 px popup.
+- [ ] `npm run preview` — renders every view in both themes into `.output/preview`. **Open
+      them.** The measurements above cannot see a row that is merely ugly; that still takes an
+      eye, and this is where the last three layout defects were finally spotted.
+
 ## 1. Install and permissions
 
 - [ ] `chrome://extensions` shows the NetCarve icon at 16, 48 and 128 px, all legible.

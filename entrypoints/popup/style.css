@@ -46,10 +46,14 @@ body {
   overflow-y: auto;
 }
 
-/* The popup is 400 px wide, so the rulers need their own sizing.
-   The eight IPv6 groups still scroll — four hex digits cannot usefully shrink further. */
+/* The popup is 400 px wide, so the rulers need their own sizing. A ruler that scrolls
+   sideways in a popup is a ruler whose last groups nobody ever sees — Chrome gives no
+   comfortable way to scroll horizontally there — so both rulers shrink to fit instead. */
 .nc-popup .nc-ruler__cells[data-family='6'] .nc-ruler__cell {
-  min-width: 3rem;
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: var(--text-xs);
+  letter-spacing: 0;
 }
 
 /* The 32 IPv4 bit cells plus their octet gaps overflow 400 px at the shared minimum width,

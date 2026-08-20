@@ -24,6 +24,22 @@ const COPY_OPTIONS: ReadonlyArray<[CopyFormat, string]> = [
   ['plain', strings.settings.copyPlain],
 ];
 
+const repo = strings.footer.repoUrl;
+
+/** One labelled link in the About list. */
+function AboutLink({ label, href, text }: { label: string; href: string; text: string }) {
+  return (
+    <div class="nc-values__row">
+      <dt class="nc-label">{label}</dt>
+      <dd>
+        <a href={href} target="_blank" rel="noreferrer">
+          {text}
+        </a>
+      </dd>
+    </div>
+  );
+}
+
 export function SettingsView({ handle, version, onExportAll, onDeleteAll }: SettingsViewProps) {
   const { settings, update } = handle;
   const [confirmation, setConfirmation] = useState('');
@@ -149,17 +165,47 @@ export function SettingsView({ handle, version, onExportAll, onDeleteAll }: Sett
           {strings.app.name} <span class="nc-mono">{strings.app.version(version)}</span> —{' '}
           {strings.app.tagline}
         </p>
-        <p class="nc-hint">
-          <a href={`mailto:${strings.footer.email}`}>{strings.footer.email}</a> ·{' '}
-          {strings.footer.credit} ·{' '}
-          <a href={strings.footer.siteUrl} target="_blank" rel="noreferrer">
-            {strings.footer.site}
-          </a>{' '}
-          ·{' '}
-          <a href={strings.footer.repoUrl} target="_blank" rel="noreferrer">
-            {strings.footer.repo}
-          </a>
-        </p>
+
+        {/* The release link points at the tag this build came from, so a bug report can name
+            the exact version without anyone having to work out what they are running. */}
+        <dl class="nc-values">
+          <AboutLink
+            label={strings.settings.about.source}
+            href={repo}
+            text="AmigoUK/Netcarve"
+          />
+          <AboutLink
+            label={strings.settings.about.release}
+            href={`${repo}/releases/tag/v${version}`}
+            text={strings.settings.about.releaseValue(version)}
+          />
+          <AboutLink
+            label={strings.settings.about.changelog}
+            href={`${repo}/blob/v${version}/CHANGELOG.md`}
+            text="CHANGELOG.md"
+          />
+          <AboutLink
+            label={strings.settings.about.issues}
+            href={`${repo}/issues/new`}
+            text={strings.settings.about.issuesValue}
+          />
+          <AboutLink
+            label={strings.settings.about.licence}
+            href={`${repo}/blob/v${version}/LICENSE`}
+            text={strings.settings.about.licenceValue}
+          />
+          <div class="nc-values__row">
+            <dt class="nc-label">{strings.settings.about.builtBy}</dt>
+            <dd>
+              <a href={strings.footer.siteUrl} target="_blank" rel="noreferrer">
+                {strings.footer.site}
+              </a>{' '}
+              · <a href={`mailto:${strings.footer.email}`}>{strings.footer.email}</a>
+            </dd>
+          </div>
+        </dl>
+
+        <p class="nc-hint">{strings.footer.credit}</p>
       </section>
     </div>
   );
