@@ -1,6 +1,6 @@
 # NetCarve — privacy policy
 
-_Last updated: 19 August 2026. Publish at https://www.attv.uk/netcarve/privacy._
+_Last updated: 19 August 2026. Published at https://attv.uk/netcarve/privacy — keep the two in step._
 
 ## The short version
 
