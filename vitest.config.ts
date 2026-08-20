@@ -37,6 +37,14 @@ export default defineConfig({
           lines: 100,
           statements: 100,
         },
+        // FR-TOOL-08: the numeric core is the same kind of code — pure arithmetic that returns
+        // a plausible wrong answer when it is wrong — so it is held to the same standard.
+        'src/lib/numeric/**/*.ts': {
+          branches: 100,
+          functions: 100,
+          lines: 100,
+          statements: 100,
+        },
       },
     },
   },

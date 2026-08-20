@@ -147,9 +147,15 @@ export const toDecimal = (value: NumericValue): string => value.value.toString()
 export const toHex = (value: NumericValue): string =>
   `0x${value.value.toString(16).toUpperCase().padStart(value.width / 4, '0')}`;
 
-/** Padded to the full width and grouped into bytes. */
-export const toBinary = (value: NumericValue): string =>
-  (value.value.toString(2).padStart(value.width, '0').match(/.{8}/g) ?? []).join(' ');
+/** Padded to the full width and grouped into bytes. Every width is a multiple of eight. */
+export function toBinary(value: NumericValue): string {
+  const bits = value.value.toString(2).padStart(value.width, '0');
+  const groups: string[] = [];
+  for (let index = 0; index < bits.length; index += 8) {
+    groups.push(bits.slice(index, index + 8));
+  }
+  return groups.join(' ');
+}
 
 /** The address spelling for widths that have one. MAC (48-bit) arrives with its own module. */
 export function toAddressForm(value: NumericValue): string | undefined {
