@@ -30,13 +30,25 @@ jobs:
       - name: Production build
         run: npm run build
 
-      # The end-to-end suite drives the built extension in a real Chrome. Extensions only
-      # Chromium's new headless mode loads unpacked extensions, so no virtual display.
+      # The archive users download. Building it here means `tests/e2e/package.spec.ts` runs
+      # against the real artifact instead of skipping.
+      - name: Package the installable archive
+        run: npm run zip
+
+      # The end-to-end suite drives the built extension in a real Chrome. Chromium's new
+      # headless mode loads unpacked extensions, so no virtual display is needed.
       - name: Install Chrome for Playwright
         run: npx playwright install --with-deps chromium
 
       - name: End-to-end suite
         run: npx playwright test
+
+      - name: Upload the installable archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: netcarve-extension
+          path: .output/*-chrome.zip
+          retention-days: 14
 
       - name: Upload the Playwright report on failure
         if: failure()

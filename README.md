@@ -24,6 +24,17 @@ running entirely on your own machine.
 | **Context menu** — select an IP or CIDR on any page and analyse it | Right-click → *Analyse "…" in NetCarve* |
 | **Export** — Markdown, plain text, CSV and JSON, ready for client documentation | Everywhere |
 
+## Install it
+
+NetCarve is not on the Chrome Web Store yet. Grab
+`netcarve-<version>-chrome.zip` from the
+[latest release](https://github.com/AmigoUK/Netcarve/releases/latest), unzip it, then in Chrome
+open `chrome://extensions`, turn on **Developer mode** and press **Load unpacked** on the
+unzipped folder.
+
+Step-by-step instructions, including Edge and how to update an existing install, are in
+[`docs/install.md`](docs/install.md).
+
 ## Privacy
 
 NetCarve requests exactly two permissions — `storage` and `contextMenus` — and makes **no network
@@ -78,6 +89,7 @@ release in one step.
 - [`docs/superpowers/plans/2026-08-19-netcarve.md`](docs/superpowers/plans/2026-08-19-netcarve.md) — the implementation plan
 - [`DECISIONS.md`](DECISIONS.md) — engineering decisions and resolved open questions
 - [`CHANGELOG.md`](CHANGELOG.md) — release history
+- [`docs/install.md`](docs/install.md) — installing a release without a toolchain
 - [`docs/qa.md`](docs/qa.md) — manual QA checklist
 - [`docs/store-listing.md`](docs/store-listing.md) — the Chrome Web Store submission sheet, with
   every field ready to paste and the asset checklist

@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [1.1.2] — 2026-08-20
+
+### Added
+- **Every release now carries an installable package.** `scripts/release.mjs` builds
+  `netcarve-<version>-chrome.zip` after the version bump — so the manifest inside matches the
+  tag — and attaches it to the GitHub Release, with the Load-unpacked steps appended to the
+  release notes.
+- `docs/install.md`: installing without a toolchain. Chrome, Edge, Brave and Opera, what the
+  permissions screen should say, how to update an existing install without losing your
+  projects, how to remove it, and the four snags people actually hit.
+- `tests/e2e/package.spec.ts`: three checks against the **archive itself**, not the build
+  directory — that it unpacks straight to a loadable folder with every required file, that its
+  manifest declares MV3, the matching version and exactly `storage` + `contextMenus` with no
+  host permissions and no content scripts, and that a browser loads it and the popup calculates.
+- CI packages the archive, so that spec runs on every push, and uploads it as a build artifact.
+
+### Changed
+- README opens with how to install a release, and links the guide.
+
 ## [1.1.1] — 2026-08-20
 
 ### Changed
@@ -490,7 +509,8 @@ implemented, tested and building.
 - Extension icons at 16/32/48/96/128 px.
 - The product specification (`docs/spec.md`), implementation plan and `DECISIONS.md`.
 
-[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/AmigoUK/Netcarve/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.2
 [1.1.1]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.1
 [1.1.0]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.1.0
 [1.0.2]: https://github.com/AmigoUK/Netcarve/releases/tag/v1.0.2
